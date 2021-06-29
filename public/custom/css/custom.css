@@ -1,0 +1,217 @@
+/********** CAMBIAR COLOR DE MENU ****************/
+[class*=sidebar-dark-] {
+    background-color: #253846 !important;
+}
+/******* TODA ESTA SECCION ES PARA EL LOGO *******/
+.brand-link {
+    padding: .325rem .5rem !important;
+    text-align: center;
+}
+.brand-link span.brand-text {
+    font-size: 1.5em;
+}
+.brand-link img.brand-image {
+    max-height: 35px !important;
+    height: 35px !important;
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-right: 0 !important;
+    margin-left: .7rem !important;
+    float: none !important;
+}
+/************** NAVBAR PERSONALIZADO *************/
+/* .navbar {
+    padding: 0 !important;
+} */
+.nav-item.dropdown {
+    /*padding: .5rem;*/
+    padding: 0.236rem .5rem;
+}
+.nav-item.dropdown.custom:hover {
+    background-color: #e9ecefb8;
+}
+.dropdown-menu-lg.custom {
+    min-width: 236px;
+}
+.dropdown-divider.custom {
+    margin: 0;
+}
+.dropdown-item.custom:focus, .dropdown-item.custom:hover {
+    background-color: #e9ecefb8;
+}
+/******* BOTON MODIFICADO DEL COLOR SUCCESS ******/
+.btn-success2 {
+    color: #fff;
+    background-color: #20c997;
+    border-color: #20c997;
+    box-shadow: none;
+}
+.btn-success2:hover {
+    color: #fff;
+    background-color: #2ba580;
+    border-color: #2ba580;
+}
+label.required::after {
+    content: " (*)";
+    color: red;
+}
+/************* INPUTS HEIGHT BOOTSTRAP ***********/
+input.form-control,
+select.form-control {
+    height: calc(2.15rem) !important;
+    padding: .375rem .75rem !important;
+    font-size: 1em !important;
+}
+textarea.form-control {
+    font-size: 1em !important;
+}
+.input-group-text {
+    padding: 0 .75rem;
+    font-size: inherit;
+}
+/************** MODAL SHOW BOOTSTRAP ************/
+.modal.fade.show {
+    padding-left: 0 !important;
+}
+/**************** DRAG AND DROP *****************/
+.list-drag .item-list-drag.seleccionado {
+    transform: scale(1.01);
+}
+.list-drag .item-list-drag.drag {
+    opacity: 0;
+}
+
+/* estilo para las validaciones */
+form .fields-errors {
+    display: none;
+    position: absolute;
+    top: -7px;
+    left: 0;
+    right: 0;
+    background: #fcf8e3;
+    border: 1px solid #faebcc;
+    color: #8a6d3b;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    padding: 3px 5px;
+    cursor: default;
+}
+form .fields-errors:after {
+    content: '';
+    position: absolute;
+    border: 4px solid transparent;
+    border-top-color: inherit;
+    margin-left: -8px;
+    bottom: -9px;
+    left: 50%;
+    pointer-events: none;
+}
+/* ------------------------------ */
+.spanner {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    display: none;
+    text-align: center;
+    transform: translateY(-50%);
+    z-index: 1050;
+    opacity: 1;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+}
+.spanner-content {
+    /* background-color: white; */
+    max-width: 330px;
+    padding: 2em 0;
+    border-radius: 5px;
+    margin: auto;
+    /* box-shadow: 0 0.5rem 1rem rgba(0,0,0,.5); */
+}
+
+/* Toda esta parte es para las subida de imagenes */
+.avatar-change .avatar-btns {
+    display: none;
+}
+.avatar-change.hide .btn-upload-custom {
+    display: none;
+}
+.avatar-change.hide .avatar-btns {
+    display: block;
+}
+.upload-custom {
+    /* padding: .375rem .75rem; 8px 20px */
+    padding: .35rem .5rem;
+    background: #ffc107;
+    color: #fff;
+    border: 0px solid #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    display: inline-block;
+}
+/* ------------------------------------------------- */
+
+/* CORRIGE ESTOS DEL PLUGIN SELECT2 */
+.select2-hidden-accessible[style='border-color: rgb(226, 162, 162);'] + .select2-container .select2-selection--single {
+    border-color: rgb(226, 162, 162) !important;
+}
+.select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+    line-height: 2rem !important;
+}
+.select2-container--bootstrap4 .select2-selection--single {
+    height: calc(2.15rem)!important;
+}
+.select2.select2-container.select2-container--bootstrap4 {
+    width: 100% !important;
+}
+/*************************************************/
+/* estilo para quitar padding a los td del table*/
+table.table-custom {
+    border-collapse: collapse !important;
+}
+table.table-custom thead th {
+    border-bottom: 2px solid #dee2e6 !important;
+}
+table.table-custom tbody td {
+    vertical-align: inherit;
+    padding: .35rem .75rem;
+    /*padding: .15rem .5rem !important;*/
+}
+/* BOTONES PERSONALIZADOS */
+.btn-orange {
+    color: #fff;
+    background-color: #f5a541;
+    border-color: #f5a541;
+    box-shadow: none;
+}
+.btn-orange:hover {
+    color: #fff;
+    background-color: #e09c48;
+    border-color: #e09c48;
+}
+
+.img-size-xs {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
+.navbar-nav.create-cpe .active > .nav-link, 
+.navbar-nav.create-cpe .nav-link.active, 
+.navbar-nav.create-cpe .nav-link.show, 
+.navbar-nav.create-cpe .show > .nav-link {
+    color: #ffffff;
+    background:#20c997;
+}
+
+.navbar-nav.create-cpe .nav-link {
+    color: #000000;
+    border: 1px solid #20c997;
+}
+
+/* .eachword:hover {
+    background-color: rgba(23, 162, 184, .6);
+    color: #ffffff;
+} */

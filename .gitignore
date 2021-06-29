@@ -1,0 +1,14 @@
+.htaccess
+
+app/libs/cache/
+app/libs/phpmailer/
+app/.htaccess
+
+vendor/
+
+public/custom/img/
+public/custom/fonts/
+public/dist/
+public/plugins/
+public/.htaccess
+public/index.php
