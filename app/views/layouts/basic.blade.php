@@ -6,11 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ APP_NAME }} - @yield('title')</title>
     @include('layouts.includes.env')
-    <link rel="stylesheet" href="{{ PUBLIC_ROUTE }}dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="{{ PUBLIC_ROUTE }}plugins/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="{{ CUSTOM_ROUTE }}css/all-fonts.css">
-    <link rel="stylesheet" href="{{ CUSTOM_ROUTE }}css/global.css">
-    <link rel="stylesheet" href="{{ CUSTOM_ROUTE }}css/custom.css">
+    <link rel="stylesheet" href="{{ PUBLIC_ROUTE }}dist/css/adminlte.min.css?{{CACHE_VERSION}}">
+    <link rel="stylesheet" href="{{ PUBLIC_ROUTE }}plugins/fontawesome-free/css/all.min.css?{{CACHE_VERSION}}">
+    <link rel="stylesheet" href="{{ CUSTOM_ROUTE }}css/all-fonts.css?{{CACHE_VERSION}}">
+    <link rel="stylesheet" href="{{ CUSTOM_ROUTE }}css/global.css?{{CACHE_VERSION}}">
+    <link rel="stylesheet" href="{{ CUSTOM_ROUTE }}css/custom.css?{{CACHE_VERSION}}">
     @yield('csss')
 </head>
 <body class="hold-transition text-sm" style="background-color: #e9ecef;">
@@ -26,10 +26,10 @@
             </div>
         </div>
     </div>
-    <script src="{{ PUBLIC_ROUTE }}plugins/jquery/jquery.min.js"></script>
-    <script src="{{ PUBLIC_ROUTE }}dist/js/adminlte.min.js"></script>
-    <script src="{{ CUSTOM_ROUTE }}js/global.js?v=10.2.3"></script>
-    <script src="{{ PLUGINS_ROUTE }}sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="{{ PUBLIC_ROUTE }}plugins/jquery/jquery.min.js?{{CACHE_VERSION}}"></script>
+    <script src="{{ PUBLIC_ROUTE }}dist/js/adminlte.min.js?{{CACHE_VERSION}}"></script>
+    <script src="{{ CUSTOM_ROUTE }}js/global.js?{{CACHE_VERSION}}"></script>
+    <script src="{{ PLUGINS_ROUTE }}sweetalert2/sweetalert2.all.min.js?{{CACHE_VERSION}}"></script>
     @yield('scripts')
 </body>
 </html>

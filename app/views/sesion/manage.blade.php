@@ -103,5 +103,5 @@
 @endsection
 
 @section('script')
-    <script src="{{ CUSTOM_ROUTE }}js/{{$controller}}/manage.js"></script>
+    <script src="{{ CUSTOM_ROUTE }}js/{{$controller}}/manage.js?{{CACHE_VERSION}}"></script>
 @endsection

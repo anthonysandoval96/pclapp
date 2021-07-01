@@ -37,5 +37,5 @@
 @endsection
 
 @section('script')
-    <script src="{{ CUSTOM_ROUTE }}js/home.js"></script>
+    <script src="{{ CUSTOM_ROUTE }}js/home.js?{{CACHE_VERSION}}"></script>
 @endsection

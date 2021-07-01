@@ -56,5 +56,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ CUSTOM_ROUTE }}js/access/login.js"></script>
+    <script src="{{ CUSTOM_ROUTE }}js/access/login.js?{{CACHE_VERSION}}"></script>
 @endsection

@@ -81,28 +81,36 @@ class Sesiones extends Controller {
         $orderby = "sesion ASC, linea ASC, letra ASC";
         $this->db->select("sesion", "*", null, $where, $orderby, "1");
         $resultado = $this->db->getQueryResult()[0];
+
         if ($resultado == null) $resultado = $this->crearPrimerSesion();
         
         $_SESSION["sesion_diaria"] = $resultado;
         $sesion_diaria = $_SESSION["sesion_diaria"];
 
-        if ($sesion_diaria["asignado"] == 0 && $sesion_diaria["parte"] == 1) $this->asignarPalabras();
-        
-        return $sesion_diaria;
+        $resp = ["respuesta" => true];
+
+        if ($sesion_diaria["asignado"] == 0 && $sesion_diaria["parte"] == 1) $resp =  $this->asignarPalabras();
+
+        return array_merge($resp, $sesion_diaria);
     }
     /******************************************************/
     public function asignarPalabras() {
+        $respuesta = [];
         $palabras_aleatorias = $this->algortimoAleatorioDePalabras();
-        $sesion_id = $_SESSION["sesion_diaria"]["id"];
-        $presql = "DELETE FROM temporal WHERE sesion_id = $sesion_id";
-        $this->db->obtenerColumnaSql($presql);
-        for ($i=0; $i < count($palabras_aleatorias); $i++) {
-            $p_id = $palabras_aleatorias[$i]["id"];
-            $sql = "INSERT INTO temporal (sesion_id, palabra_id) VALUES ($sesion_id, $p_id)";
-            $this->db->obtenerColumnaSql($sql, false);
+        if ($palabras_aleatorias) {
+            $sesion_id = $_SESSION["sesion_diaria"]["id"];
+            for ($i=0; $i < count($palabras_aleatorias); $i++) {
+                $p_id = $palabras_aleatorias[$i]["id"];
+                $sql = "INSERT INTO temporal (sesion_id, palabra_id) VALUES ($sesion_id, $p_id)";
+                $this->db->obtenerColumnaSql($sql, false);
+            }
+            $sql2 = "UPDATE sesion SET asignado = 1 WHERE id = $sesion_id";
+            $this->db->obtenerColumnaSql($sql2, false);
+            $respuesta["respuesta"] = true;
+        } else {
+            $respuesta["respuesta"] = false;
         }
-        $sql2 = "UPDATE sesion SET asignado = 1 WHERE id = $sesion_id";
-        $this->db->obtenerColumnaSql($sql2, false);
+        return $respuesta;
     } 
     /******************************************************/
     public function algortimoAleatorioDePalabras() {
@@ -110,6 +118,7 @@ class Sesiones extends Controller {
         $sql .= " RIGHT OUTER JOIN palabra P ON P.id = H.palabra_id AND H.usuario_id = $this->usuario_id";
         $sql .= " WHERE H.id IS NULL ORDER BY RAND() LIMIT 20";
         $resultado = $this->db->obtenerColumnaSql($sql, false);
+        if (empty($resultado)) return false;
         return $resultado;
     }
     /******************************************************/
@@ -120,14 +129,7 @@ class Sesiones extends Controller {
     }
     /******************************************************/
     public function updateSesion() {
-        /*
-        sesion.id = 0
-        sesion.sesion = 1
-        sesion.linea = 2
-        sesion.letra = 3
-        sesion.parte = 4
-        */
-        // return print_r($_POST);
+        /* sesion.id = 0 / sesion.sesion = 1 / sesion.linea = 2 / sesion.letra = 3 / sesion.parte = 4 */
         if (!empty($_POST["sesion-data"])) {
 
             $sesion_data = base64_decode($_POST["sesion-data"]);
@@ -144,12 +146,13 @@ class Sesiones extends Controller {
             }
             
             if (isset($_POST["check-word"]) && !empty($_POST["check-word"])) {
+
                 $array_palabras = $_POST["check-word"];
-                // $sql1 = "UPDATE temporal SET checked = 1 WHERE sesion_id = ? AND palabra_id = ?";
+                
                 $sql1 = "INSERT INTO historial (usuario_id, palabra_id, aprendida) VALUES (?, ?, ?)";
-
-                $sql2 = "UPDATE sesion SET sesion = ?, linea = ?, asignado = 0, parte = 1 WHERE id = ?";
-
+                $sql2 = "UPDATE sesion SET sesion = ?, linea = ?, letra = 1, asignado = 0, parte = 1 WHERE id = ?";
+                $sql3 = "DELETE FROM temporal WHERE sesion_id = ?";
+                
                 try {
                     $this->db->conn->autocommit(false);
                     if (!$sql1 = $this->db->conn->prepare($sql1)) {
@@ -158,10 +161,7 @@ class Sesiones extends Controller {
                     $aprendida = "conocida";
                     for ($i = 0; $i < count($array_palabras); $i++) {
                         $p_id = $array_palabras[$i];
-                        // $sql1->bind_param("ii", $post_sesion, $p_id);
-
                         $sql1->bind_param("iis", $this->usuario_id, $p_id, $aprendida);
-
                         $sql1->execute();
                     }
                     if (!$sql2 = $this->db->conn->prepare($sql2)) {
@@ -169,12 +169,68 @@ class Sesiones extends Controller {
                     }
                     $sql2->bind_param("iii", $sesion, $linea, $id);
                     $sql2->execute();
+                    if (!$sql3 = $this->db->conn->prepare($sql3)) {
+                        throw new Exception('Error al registrar segundo step.');
+                    }
+                    $sql3->bind_param("i", $id);
+                    $sql3->execute();
                     return $this->db->conn->commit();
                 } catch (Exception $ex) {
                     $this->db->conn->rollback();
                     return $ex->getMessage();
                 } 
             }
+        }
+    }
+
+    public function cambiarLetraYpalabras() {
+
+        if ($_SESSION["sesion_diaria"]) {
+
+            $palabras_aleatorias = $this->algortimoAleatorioDePalabras();
+
+            $sesion_diaria = $_SESSION["sesion_diaria"];
+            $sesion_id = $sesion_diaria["id"];
+            $sesion_letra = $sesion_diaria["letra"];
+
+            if ($sesion_letra > 0 && $sesion_letra < 3) {
+
+                $new_sesion_letra = $sesion_letra + 1;
+                
+                $presql = "DELETE FROM temporal WHERE sesion_id = $sesion_id";
+                $this->db->obtenerColumnaSql($presql);
+                
+                for ($i = 0; $i < count($palabras_aleatorias); $i++) {
+                    $p_id = $palabras_aleatorias[$i]["id"];
+                    $sql = "INSERT INTO temporal (sesion_id, palabra_id) VALUES ($sesion_id, $p_id)";
+                    $this->db->obtenerColumnaSql($sql, false);
+                }
+                
+                $_SESSION["sesion_diaria"]["letra"] = $new_sesion_letra;
+
+                $finallysql = "UPDATE sesion SET letra = $new_sesion_letra WHERE id = $sesion_id";
+                $this->db->obtenerColumnaSql($finallysql);
+
+                return [true, "Ya que no conoces ninguna palabra listada, cambiaremos por otro grupo de palabras (<b>".getLetterLine($new_sesion_letra)."</b>)!"];
+
+            } else {
+                return [false, "Solo puedes cambiar de grupo de palabras 3 veces (<b>".getLetterLine($sesion_letra)."</b>)."];
+            }
+
+        } else {
+            return [false, "No existe ninguna sesión asignada para este usuario!"];
+        }
+
+    }
+
+    public function actualizarParteDeSesion() {
+        if (!empty($_POST["sesion-data"])) {
+            print_r($_POST["sesion-data"]);
+            $sesion_data = base64_decode($_POST["sesion-data"]);
+            $post_sesionid = explode(",", $sesion_data)[0];
+            $post_sesionid = intval($post_sesionid);
+            $sql = "UPDATE sesion SET parte = 0 WHERE id = $post_sesionid";
+            $this->db->obtenerColumnaSql($sql);
         }
     }
 }

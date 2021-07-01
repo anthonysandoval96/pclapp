@@ -3,8 +3,8 @@
 @section('title', $title)
 
 @section('css')
-    <link rel="stylesheet" href="{{ PLUGINS_ROUTE }}datatables/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="{{ PLUGINS_ROUTE }}datatables/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="{{ PLUGINS_ROUTE }}datatables/jquery.dataTables.min.css?{{CACHE_VERSION}}">
+    <link rel="stylesheet" href="{{ PLUGINS_ROUTE }}datatables/buttons.dataTables.min.css?{{CACHE_VERSION}}">
 @endsection
 
 @section('content')
@@ -58,15 +58,15 @@
 @endsection
 
 @section('script')
-    <script src="{{PLUGINS_ROUTE}}datatables/jquery.dataTables.min.js"></script>
-    {{-- <script src="{{PLUGINS_ROUTE}}datatables-responsive/js/dataTables.responsive.min.js"></script> --}}
-    <script src="{{PLUGINS_ROUTE}}datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="{{PLUGINS_ROUTE}}datatables-buttons/js/buttons.flash.min.js"></script>
-    <script src="{{PLUGINS_ROUTE}}datatables-buttons/js/buttons.colVis.min.js"></script>
-    <script src="{{PLUGINS_ROUTE}}datatables-buttons/js/jszip.min.js"></script>
-    <script src="{{PLUGINS_ROUTE}}datatables-buttons/js/pdfmake.min.js"></script>
-    <script src="{{PLUGINS_ROUTE}}datatables-buttons/js/vfs_fonts.js"></script>
-    <script src="{{PLUGINS_ROUTE}}datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="{{PLUGINS_ROUTE}}datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="{{ CUSTOM_ROUTE }}js/{{$controller}}/manage.js?v=10.5.4"></script>
+    <script src="{{PLUGINS_ROUTE}}datatables/jquery.dataTables.min.js?{{CACHE_VERSION}}"></script>
+    {{-- <script src="{{PLUGINS_ROUTE}}datatables-responsive/js/dataTables.responsive.min.js?{{CACHE_VERSION}}"></script> --}}
+    <script src="{{PLUGINS_ROUTE}}datatables-buttons/js/dataTables.buttons.min.js?{{CACHE_VERSION}}"></script>
+    <script src="{{PLUGINS_ROUTE}}datatables-buttons/js/buttons.flash.min.js?{{CACHE_VERSION}}"></script>
+    <script src="{{PLUGINS_ROUTE}}datatables-buttons/js/buttons.colVis.min.js?{{CACHE_VERSION}}"></script>
+    <script src="{{PLUGINS_ROUTE}}datatables-buttons/js/jszip.min.js?{{CACHE_VERSION}}"></script>
+    <script src="{{PLUGINS_ROUTE}}datatables-buttons/js/pdfmake.min.js?{{CACHE_VERSION}}"></script>
+    <script src="{{PLUGINS_ROUTE}}datatables-buttons/js/vfs_fonts.js?{{CACHE_VERSION}}"></script>
+    <script src="{{PLUGINS_ROUTE}}datatables-buttons/js/buttons.html5.min.js?{{CACHE_VERSION}}"></script>
+    <script src="{{PLUGINS_ROUTE}}datatables-buttons/js/buttons.print.min.js?{{CACHE_VERSION}}"></script>
+    <script src="{{ CUSTOM_ROUTE }}js/{{$controller}}/manage.js?{{CACHE_VERSION}}"></script>
 @endsection

@@ -46,4 +46,13 @@ class Sesion extends Controller {
         $this->response = $this->currentModel->updateSesion();
         echo $this->response;
     }
+    /******************************************************/
+    public function cambiarLetraYpalabras() {
+        $this->response = $this->currentModel->cambiarLetraYpalabras();
+        $this->process_result();
+    }
+    /******************************************************/
+    public function actualizarParteDeSesion() {
+        $this->response = $this->currentModel->actualizarParteDeSesion();
+    }
 }

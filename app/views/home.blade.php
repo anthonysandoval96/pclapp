@@ -24,7 +24,7 @@
             <!-- /.col-md-6 -->
         </div>
         <!-- /.row -->
-        <div id="body-sesiones" class="row py-3" style="display: none;"></div>
+        <div id="body-sesiones" class="row py-2" style="display: none;"></div>
         <!-- /.row -->
     </div>
     <!-- /.container-fluid -->
@@ -33,5 +33,5 @@
 @endsection
 
 @section('script')
-    <script src="{{ CUSTOM_ROUTE }}js/home.js"></script>
+    <script src="{{ CUSTOM_ROUTE }}js/home.js?{{CACHE_VERSION}}"></script>
 @endsection

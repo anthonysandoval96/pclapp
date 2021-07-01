@@ -68,7 +68,7 @@ class Controller {
         return new Usuarios();
     }
 
-    public function process_result($action, $gender = 'm') {
+    public function process_result($action ='create', $gender = 'm') {
         if (gettype($this->response) !== 'boolean') {
             $message = $this->response[1];
             $this->response = $this->response[0];

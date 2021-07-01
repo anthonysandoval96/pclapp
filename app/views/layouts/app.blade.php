@@ -8,18 +8,11 @@
     <title>{{ APP_NAME }} - @yield('title')</title>
     @include('layouts.includes.env')
     @yield('css')
-    <link rel="stylesheet" href="{{ PLUGINS_ROUTE }}fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="{{ PLUGINS_ROUTE }}bootstrap/css/bootstrap.min.css">
-    {{-- <link rel="stylesheet" href="{{ PLUGINS_ROUTE }}bootstrap/css/bootstrap.rtl.min.css">
-    <link rel="stylesheet" href="{{ PLUGINS_ROUTE }}bootstrap/css/bootstrap-grid.min.css">
-    <link rel="stylesheet" href="{{ PLUGINS_ROUTE }}bootstrap/css/bootstrap-grid.rtl.min.css">
-    <link rel="stylesheet" href="{{ PLUGINS_ROUTE }}bootstrap/css/bootstrap-utilities.min.css">
-    <link rel="stylesheet" href="{{ PLUGINS_ROUTE }}bootstrap/css/bootstrap-utilities.rtl.min.css">
-    <link rel="stylesheet" href="{{ PLUGINS_ROUTE }}bootstrap/css/bootstrap-reboot.min.css">
-    <link rel="stylesheet" href="{{ PLUGINS_ROUTE }}bootstrap/css/bootstrap-reboot.rtl.min.css"> --}}
-    <link rel="stylesheet" href="{{ PUBLIC_ROUTE }}custom/css/all-fonts.css">
-    <link rel="stylesheet" href="{{ PUBLIC_ROUTE }}custom/css/global.css">
-    <link rel="stylesheet" href="{{ PUBLIC_ROUTE }}custom/css/custom.css">
+    <link rel="stylesheet" href="{{ PLUGINS_ROUTE }}fontawesome-free/css/all.min.css?{{CACHE_VERSION}}">
+    <link rel="stylesheet" href="{{ PLUGINS_ROUTE }}bootstrap/css/bootstrap.min.css?{{CACHE_VERSION}}">
+    <link rel="stylesheet" href="{{ PUBLIC_ROUTE }}custom/css/all-fonts.css?{{CACHE_VERSION}}">
+    <link rel="stylesheet" href="{{ PUBLIC_ROUTE }}custom/css/global.css?{{CACHE_VERSION}}">
+    <link rel="stylesheet" href="{{ PUBLIC_ROUTE }}custom/css/custom.css?{{CACHE_VERSION}}">
 </head>
 
 <body>
@@ -42,12 +35,10 @@
             <div class="spinner-border" style="width: 5rem; height: 5rem;" role="status"></div>
         </div>
     </div>
-    <script src="{{ PLUGINS_ROUTE }}jquery/jquery.min.js"></script>
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> --}}
-    <script src="{{ PLUGINS_ROUTE }}bootstrap/js/bootstrap.min.js"></script>
-    {{-- <script src="{{ PLUGINS_ROUTE }}bootstrap/js/bootstrap.bundle.min.js"></script> --}}
-    <script src="{{ PUBLIC_ROUTE }}custom/js/global.js?v=10.2.3"></script>
-    <script src="{{ PLUGINS_ROUTE }}sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="{{ PLUGINS_ROUTE }}jquery/jquery.min.js?{{CACHE_VERSION}}"></script>
+    <script src="{{ PLUGINS_ROUTE }}bootstrap/js/bootstrap.min.js?{{CACHE_VERSION}}"></script>
+    <script src="{{ PUBLIC_ROUTE }}custom/js/global.js?{{CACHE_VERSION}}"></script>
+    <script src="{{ PLUGINS_ROUTE }}sweetalert2/sweetalert2.all.min.js?{{CACHE_VERSION}}"></script>
     @yield('script')
 </body>
 

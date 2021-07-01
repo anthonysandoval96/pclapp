@@ -96,5 +96,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ CUSTOM_ROUTE }}js/{{$name_route}}/create.js"></script>
+    <script src="{{ CUSTOM_ROUTE }}js/{{$name_route}}/create.js?{{CACHE_VERSION}}"></script>
 @endsection

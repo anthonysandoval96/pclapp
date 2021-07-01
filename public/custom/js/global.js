@@ -209,11 +209,23 @@ function ucfirst(str) {
 function toasts(tipo, mensaje) {
     const Toast = Swal.mixin({
         toast: true,
-        position: 'top',
+        position: 'top-end',
         showConfirmButton: false,
-        timer: 3000
+        timer: 6000
     });
     switch (tipo) {
+        case 'success':
+            Toast.fire({
+                type: 'success',
+                title: mensaje
+            });
+            break;
+        case 'warning':
+            Toast.fire({
+                type: 'warning',
+                title: mensaje
+            });
+            break;
         case 'info':
             Toast.fire({
                 type: 'info',
@@ -229,7 +241,7 @@ function toasts(tipo, mensaje) {
     }
 }
 
-function alerts(tipo, mensaje, accion) {
+function alerts(tipo, mensaje, title = '') {
     switch (tipo) {
         case 'alert-success':
             Swal.fire({
@@ -249,7 +261,15 @@ function alerts(tipo, mensaje, accion) {
         case 'alert-info':
             Swal.fire({
                 type: 'info',
-                text: mensaje
+                title: title,
+                html: mensaje
+            });
+            break;
+        case 'alert-warning':
+            Swal.fire({
+                type: 'warning',
+                title: title,
+                html: mensaje
             });
             break;
     }
@@ -316,4 +336,18 @@ function html_avatar(class_avat, src_img) {
         </div>
     </div>`;
     return html;
+}
+
+function getLetterLine(number) {
+    var letra = "a";
+    if (number == 1) {
+        letra = "a";
+    } else if (number == 2) {
+        letra = "b";
+    } else if (number == 3) {
+        letra = "c";
+    } else {
+        return false;
+    }
+    return letra;
 }

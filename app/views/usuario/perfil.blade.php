@@ -183,5 +183,5 @@
 @endsection
 
 @section('script')
-    <script src="{{ CUSTOM_ROUTE }}js/{{$controller}}/perfil.js"></script>
+    <script src="{{ CUSTOM_ROUTE }}js/{{$controller}}/perfil.js?{{CACHE_VERSION}}"></script>
 @endsection

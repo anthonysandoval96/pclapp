@@ -17,16 +17,17 @@ if (TIPO_DESARROLLO == "LOCAL") {
     /**************** VARIABLES EN HOSTING ****************/
     /**************** VARIABLES DE LA BD ****************/
     define('DB_HOST', 'localhost');
-    define('DB_USUARIO', 'id11886709_anthonydev');
-    define('DB_PASSWORD', 'F}Q}N)_B\n-8czUY');
-    define('DB_NOMBRE', 'id11886709_ventas_online');
+    define('DB_USUARIO', 'comprend_anthony');
+    define('DB_PASSWORD', 'anthony123');
+    define('DB_NOMBRE', 'comprend_dbpcl');
     /****************************************************/
-    define('PROJECT_NAME', ''); /* SIRVE PARA EL GLOBAL.JS */
-    define('BASE_URL', "https://daltat.000webhostapp.com/");
+    define('PROJECT_NAME', '/pclapp'); /* SIRVE PARA EL GLOBAL.JS */
+    define('BASE_URL', "https://comprendamos.com".PROJECT_NAME."/");
     define('RUTA_ARCHIVE', BASE_URL . "public/custom/");
 }
 
 define('LANG_HTML', 'es');
+define('CACHE_VERSION', rand());
 define('PUBLIC_ROUTE', BASE_URL . 'public/');
 define('PLUGINS_ROUTE', PUBLIC_ROUTE . 'plugins/');
 define('CUSTOM_ROUTE', PUBLIC_ROUTE . 'custom/');
