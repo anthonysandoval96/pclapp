@@ -156,14 +156,14 @@ function calculaedad($fechanacimiento){
     return $ano_diferencia;
 }
 
-function estructura_mensaje($nombre, $username) {
+function estructura_mensaje($nombre, $username, $pass) {
     $html = "
         <p><font size='4'>Hola <b>". $nombre ."</b>.</font></p>
         <p><font size='4'>Queremos darle la bienvenida a nuestra familia de <b>APP PCL</b>.</font></p>
         <p><font size='4'>A continuación se le brinda sus credenciales de acceso:</font></p>
         <ul>
             <li><font size='4'><b>username:</b> ".$username."</font></li>
-            <li><font size='4'><b>contraseña:</b> ".$username."</font></li>
+            <li><font size='4'><b>contraseña:</b> ".$pass."</font></li>
         </ul>
     ";
     return $html;

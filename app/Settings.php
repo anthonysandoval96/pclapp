@@ -26,7 +26,6 @@ if (TIPO_DESARROLLO == "LOCAL") {
     define('RUTA_ARCHIVE', BASE_URL . "public/custom/");
 }
 
-define('LANG_HTML', 'es');
 define('CACHE_VERSION', rand());
 define('PUBLIC_ROUTE', BASE_URL . 'public/');
 define('PLUGINS_ROUTE', PUBLIC_ROUTE . 'plugins/');

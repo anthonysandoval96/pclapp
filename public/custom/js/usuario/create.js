@@ -1,40 +1,28 @@
 $(document).ready(function () {
+    $("#form-register")[0].reset();
     $(document).on('submit', '#form-register', function(e) {
         e.preventDefault();
+        $(this).find("button[type='button']").prop('disabled', true);
         var dataform = $(this).serialize();
         if (validarDatos()) {
-            $.ajax({
-                url: PROJECT_NAME + "/register/insert",
-                method: 'POST',
-                data: dataform,
-                beforeSend: function () { 
-                    loadingOverLay("show");
-                },
-                success: function (data) {
-                    var json = JSON.parse(data);
-                    if (json.respuesta) { 
-                        // alerts('alert-success', json.mensaje);
-                        Swal.fire({
-                            title: 'Buen trabajo!',
-                            text: json.mensaje,
-                            type: 'success',
-                            showCancelButton: false,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'OK'
-                          }).then((result) => {
-                            if (result.value) window.location.href = BASE_URL + "login";
-                          })
-                    } else { 
-                        alerts('alert-error', json.mensaje); 
-                    }
-                },
-                complete: function () {
-                    loadingOverLay("hide");
-                }
+            changeSubmitIcon($("#btn-register"), "fa-check-circle", "submit", "far");
+            $.post(PROJECT_NAME + "/usuario/cap_sesion_user_register", dataform, function(data, status){
+                window.location.href = BASE_URL + "usuario/realizarpago";
             });
+        } else {
+            changeSubmitIcon($("#btn-register"), "fa-check-circle", "error", 'far');
+            $(this).find("button[type='button']").prop('disabled', false);
         }
-    })
+    }).on('click', '#btn-ir-formulario', function(e) {
+        e.preventDefault();
+        $(".tab-dev").css("display", "none");
+        $("#formulario").fadeIn(1000);
+    }).on('click', '#btn-register', function(e) {
+        e.preventDefault();
+        $(this).closest("form").submit();
+    }).on('click', '#btn-atras', function() {
+        window.location.href = BASE_URL + "login";
+    });
 });
 
 function validarDatos() {

@@ -44,7 +44,7 @@
                 </div>
                 <div class="text-center mt-3">
                     <a href="{{ BASE_URL }}register" class="d-inline-block h1 border rounded border-info px-3 py-1">
-                        <h5 class="mb-0">!Suscríbite ya!</h5>
+                        <h5 class="mb-0">!Suscríbete ya!</h5>
                     </a>
                 </div>
             </div>

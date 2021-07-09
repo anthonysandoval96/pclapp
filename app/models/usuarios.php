@@ -58,17 +58,28 @@ class Usuarios extends Controller {
     /******************************************************/
     public function insertar() {
 
+        if (!isset($_SESSION["user_register"])) return [false, "No se logró registrar el usuario, revise bien los datos ingresados."];
+        $sesion_register = $_SESSION["user_register"];
+
         $mensaje_ok = "El usuario se registró con éxito, revisa tus credenciales de acceso en tu correo electrónico ingresado.";
 
-        $post_nombres = trim($_POST['in-usuario-nombres']);
-        $post_appaterno = trim($_POST['in-usuario-appaterno']);
-        $post_apmaterno = trim($_POST['in-usuario-apmaterno']);
-        $post_fechanac = ($_POST['in-usuario-fnacimiento'] !== "") ? $_POST['in-usuario-fnacimiento'] : null;
-        // $post_genero = ($_POST['sel-usuario-genero'] !== "") ? $_POST['sel-usuario-genero'] : "otro";
-        $post_direccion = (trim($_POST['in-usuario-direccion']) !== "") ? trim($_POST['in-usuario-direccion']) : null;
-        $post_email = (trim($_POST['in-usuario-email']) !== "") ? trim($_POST['in-usuario-email']) : null;
-        $post_celular = (trim($_POST['in-usuario-celular']) !== "") ? trim($_POST['in-usuario-celular']) : null;
-        // $post_codigo = md5(uniqid(rand()));
+        // $post_nombres = trim($_POST['in-usuario-nombres']);
+        // $post_appaterno = trim($_POST['in-usuario-appaterno']);
+        // $post_apmaterno = trim($_POST['in-usuario-apmaterno']);
+        // $post_fechanac = ($_POST['in-usuario-fnacimiento'] !== "") ? $_POST['in-usuario-fnacimiento'] : null;
+        // // $post_genero = ($_POST['sel-usuario-genero'] !== "") ? $_POST['sel-usuario-genero'] : "otro";
+        // $post_direccion = (trim($_POST['in-usuario-direccion']) !== "") ? trim($_POST['in-usuario-direccion']) : null;
+        // $post_email = (trim($_POST['in-usuario-email']) !== "") ? trim($_POST['in-usuario-email']) : null;
+        // $post_celular = (trim($_POST['in-usuario-celular']) !== "") ? trim($_POST['in-usuario-celular']) : null;
+        // // $post_codigo = md5(uniqid(rand()));
+
+        $post_nombres = trim($sesion_register['in-usuario-nombres']);
+        $post_appaterno = trim($sesion_register['in-usuario-appaterno']);
+        $post_apmaterno = trim($sesion_register['in-usuario-apmaterno']);
+        $post_fechanac = ($sesion_register['in-usuario-fnacimiento'] !== "") ? $sesion_register['in-usuario-fnacimiento'] : null;
+        $post_direccion = null;
+        $post_email = (trim($sesion_register['in-usuario-email']) !== "") ? trim($sesion_register['in-usuario-email']) : null;
+        $post_celular = (trim($sesion_register['in-usuario-celular']) !== "") ? trim($sesion_register['in-usuario-celular']) : null;
 
         /* Generar el username automaticamente con los datos ingresados */
         $primera_letra_nombre = mb_substr($post_nombres, 0, 1, "UTF-8");
@@ -82,15 +93,17 @@ class Usuarios extends Controller {
         /* Si existe vamos agregando numeración al username */
         if ($count_username > 0) $username = $username . $count_username;
         
-        $password = password_hash($username, PASSWORD_DEFAULT);
-
+        $password = substr(md5(microtime()), 1, 10);
+        
         $sql = "INSERT INTO persona (nombres, apellido_paterno, apellido_materno, fecha_nacimiento, direccion, email, celular) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $sql2 = "INSERT INTO usuario (username, password, persona_id, created) VALUES (?, ?, ?, ?)";
-
+        
         $nombre_lector = $post_nombres . " " . $post_appaterno . " " . $post_apmaterno;
-        $mensaje = estructura_mensaje($nombre_lector, $username);
+        $mensaje = estructura_mensaje($nombre_lector, $username, $password);
         $subject = "Bienvenido a la APP PCL";
-
+        
+        $password = password_hash($password, PASSWORD_DEFAULT);
+        
         try {
             $this->db->conn->autocommit(false);
             if (!$sql = $this->db->conn->prepare($sql)) {
@@ -236,5 +249,36 @@ class Usuarios extends Controller {
         } else {
             return $resultado;
         }
+    }
+
+    public function respuesta_izipay() {
+        /** 
+         * Initialize the SDK 
+         * see keys.php
+         */
+        $client = new Lyra\Client();
+        //$_POST['kr-hash']= 'Yga5AOlU5qomnyEj3EQvwMvpotybpd7q4Yk0z9ZZtUaJQ';
+
+        /* Check the signature using password */
+        if (!$client->checkHash()) {
+            //something wrong, probably a fraud ....
+            return false;
+            signature_error($formAnswer['kr-answer']['transactions'][0]['uuid'], $hashKey, 
+            $client->getLastCalculatedHash(), $_POST['kr-hash']);
+            throw new Exception('invalid signature');
+        }
+
+        $rawAnswer = $client->getParsedFormAnswer();
+        $formAnswer = $rawAnswer['kr-answer'];
+
+        /* Retrieve the transaction id from the IPN data */
+        $transaction = $formAnswer['transactions'][0];
+
+        /* get some parameters from the answer */
+        $orderStatus = $formAnswer['orderStatus'];
+        $orderId = $formAnswer['orderDetails']['orderId'];
+        $transactionUuid = $transaction['uuid'];
+
+        return json_encode($formAnswer);
     }
 }

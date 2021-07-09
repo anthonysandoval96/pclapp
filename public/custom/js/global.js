@@ -23,13 +23,15 @@ $(document).ready(function() {
     });
 });
 
-function changeSubmitIcon(btn, icon_original, tipo) {
+function changeSubmitIcon(btn, icon_original, tipo, fas='fas') {
     var icon_spinner = "fa-spinner fa-pulse";
-    var icon = $(btn).find("i.fas");
+    var icon = $(btn).find("i."+fas);
     if (tipo === "error") {
+        if (fas == "far") icon = icon.removeClass("fas").addClass("far");
         $(btn).removeClass("disabled");
         $(icon).removeClass(icon_spinner).addClass(icon_original);
     } else if (tipo === "submit") {
+        if (fas == "far") icon = icon.removeClass(fas).addClass("fas");
         if ($(btn).hasClass("disabled")) { return false; }
         $(btn).addClass("disabled");
         $(icon).removeClass(icon_original).addClass(icon_spinner);

@@ -1,4 +1,5 @@
 .htaccess
+favicon.ico
 
 app/libs/cache/
 app/libs/phpmailer/

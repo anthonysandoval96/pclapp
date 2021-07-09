@@ -20,6 +20,7 @@ class Register extends Controller {
     /******************************************************/
     public function insert() {
         $this->response = $this->usuarioModelo->insertar();
+        session_unset();
         $this->process_result('create');
     }
 }
