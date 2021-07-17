@@ -8,7 +8,7 @@ $client = new Lyra\Client();
 /**
 * I create a formToken
 */
-$store = array("amount" => 1000,
+$store = array("amount" => 1,
 "currency" => "PEN",
 "orderId" => uniqid("MyOrderId"),
 "customer" => array("email" => $_SESSION["user_register"]["in-usuario-email"])

@@ -8,7 +8,7 @@ class Usuario extends Controller {
     
     public function __construct() {
         $this->currentModel = $this->model(getPluralPrase($this->route_view));
-        // $this->currentModel->isLoggedIn();
+        $this->currentModel->isLoggedIn();
         $this->title_route_main = 'Administrar '.getPluralPrase($this->route_view, 'may');
     }
     /******************************************************/
@@ -57,25 +57,5 @@ class Usuario extends Controller {
     public function changePassword() {
         $this->response = $this->currentModel->cambiarContrasena();
         $this->process_result('update');
-    }
-    /******************************************************/
-    public function payment_response() {
-        $this->response = $this->currentModel->respuesta_izipay();
-        if (!$this->response) header('Location: ' . BASE_URL . 'login');
-        $datos = [
-            "respuesta" => $this->response
-        ];
-        $this->view($this->route_view . '/response_payment', $datos);
-    }
-
-    public function cap_sesion_user_register() {
-        $_SESSION["user_register"] = $_POST;
-    }
-
-    public function realizarpago() {
-        $datos = [
-            'title' => "Realizar pago"
-        ];
-        $this->view($this->route_view . '/realizarpago', $datos);
     }
 }

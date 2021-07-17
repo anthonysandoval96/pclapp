@@ -6,8 +6,8 @@ $(document).ready(function () {
         var dataform = $(this).serialize();
         if (validarDatos()) {
             changeSubmitIcon($("#btn-register"), "fa-check-circle", "submit", "far");
-            $.post(PROJECT_NAME + "/usuario/cap_sesion_user_register", dataform, function(data, status){
-                window.location.href = BASE_URL + "usuario/realizarpago";
+            $.post(PROJECT_NAME + "/register/cap_sesion_user_register", dataform, function(data, status){
+                window.location.href = BASE_URL + "register/realizarpago";
             });
         } else {
             changeSubmitIcon($("#btn-register"), "fa-check-circle", "error", 'far');
