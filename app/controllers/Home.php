@@ -9,27 +9,31 @@ class Home extends Controller {
     public function __construct() {
         $this->usuario_id = (isset($_SESSION["usuario_id"])) ? $_SESSION["usuario_id"] : "";
         $this->usuarioModelo = parent::modeloUsuario();
-        $this->usuarioModelo->isLoggedIn();
         $this->title_route_main = 'Bienvenido';
         $this->currentModel = $this->model(getPluralPrase($this->route_view));
-        $this->model("sesiones")->asignarSesion();
     }
     /******************************************************/
     public function index() {
-        if ($this->usuario_id == 1) {
-            $data = [
-                'title' => $this->title_route_main,
-                'controller' => $this->route_view,
-                'userlogued' => $this->usuarioModelo->userLoggedData()
-            ];
-            $this->view($this->route_view.'admin', $data);
+        if (!$this->usuarioModelo->accessPermission()) {
+            $data = ['title' => 'Login'];
+            $this->view('access/login', $data);
         } else {
-            $data = [
-                'title' => $this->title_route_main,
-                'controller' => $this->route_view,
-                'userlogued' => $this->usuarioModelo->userLoggedData()
-            ];
-            $this->view($this->route_view, $data);
+            if ($this->usuario_id == 1) {
+                $data = [
+                    'title' => $this->title_route_main,
+                    'controller' => $this->route_view,
+                    'userlogued' => $this->usuarioModelo->userLoggedData()
+                ];
+                $this->view($this->route_view.'admin', $data);
+            } else {
+                $this->model("sesiones")->asignarSesion();
+                $data = [
+                    'title' => $this->title_route_main,
+                    'controller' => $this->route_view,
+                    'userlogued' => $this->usuarioModelo->userLoggedData()
+                ];
+                $this->view($this->route_view, $data);
+            }
         }
     }
 }

@@ -7,7 +7,6 @@ class Register extends Controller {
     
     public function __construct() {
         $this->usuarioModelo = parent::modeloUsuario();
-        if ($this->usuarioModelo->isLoggedIn('0')) header('Location: home');
     }
     /******************************************************/
     public function index() {
@@ -19,18 +18,24 @@ class Register extends Controller {
     }
     /******************************************************/
     public function insert() {
-        $this->response = $this->usuarioModelo->insertar();
-        session_unset();
-        $this->process_result('create');
+        if (isset($_SESSION["user_register"])) {
+            $this->response = $this->usuarioModelo->insertar();
+            session_unset();
+            $this->process_result('create');
+        }
     }
     /******************************************************/
     public function payment_response() {
         $this->response = $this->usuarioModelo->respuesta_izipay();
-        if (!$this->response) header('Location: ' . BASE_URL . 'login');
-        $datos = [
-            "respuesta" => $this->response
-        ];
-        $this->view($this->route_view . '/response_payment', $datos);
+        if (!$this->response) {
+            $data = ['title' => 'Login'];
+            $this->view('access/login', $data);
+        } else {
+            $datos = [
+                "respuesta" => $this->response
+            ];
+            $this->view($this->route_view . '/response_payment', $datos);
+        }
     }
     /******************************************************/
     public function cap_sesion_user_register() {
@@ -38,9 +43,11 @@ class Register extends Controller {
     }
     /******************************************************/
     public function realizarpago() {
-        $datos = [
-            'title' => "Realizar pago"
-        ];
-        $this->view($this->route_view . '/realizarpago', $datos);
+        if (isset($_SESSION["user_register"])) {
+            $datos = [
+                'title' => "Realizar pago"
+            ];
+            $this->view($this->route_view . '/realizarpago', $datos);
+        }
     }
 }

@@ -9,15 +9,28 @@ class Login extends Controller {
     public $name_controller = 'login';
     
     public function __construct() {
+        $this->usuario_id = (isset($_SESSION["usuario_id"])) ? $_SESSION["usuario_id"] : "";
         $this->usuarioModelo = parent::modeloUsuario();
         $this->title_route_main = 'Login';
-        if ($this->usuarioModelo->isLoggedIn('0')) header('Location: home');
         $this->currentModel = $this->model(getPluralPrase($this->name_controller));
     }
     /******************************************************/
     public function index() {
-        $data = ['title' => $this->title_route_main];
-        $this->view($this->route_view . '/login', $data);
+        if (!$this->usuarioModelo->accessPermission()) {
+            $data = ['title' => $this->title_route_main];
+            $this->view($this->route_view . '/login', $data);
+        } else {
+            $data = [
+                'title' => "Bienvenido",
+                'controller' => 'home',
+                'userlogued' => $this->usuarioModelo->userLoggedData()
+            ];
+            if ($this->usuario_id == 1) {
+                $this->view('homeadmin', $data);
+            } else {
+                $this->view('home', $data);
+            }
+        }
     }
     /******************************************************/
     public function loginer() {

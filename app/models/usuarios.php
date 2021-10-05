@@ -39,6 +39,18 @@ class Usuarios extends Controller {
         } else { return $respuesta; }
     }
     /******************************************************/
+    public function accessPermission() {
+        $usuario_id = null;
+        $respuesta = 0;
+        if (isset($_SESSION['usuario_id'])) {
+            $usuario_id = $this->usuario_id;
+            $this->db->select("usuario", "id", null, "id = $usuario_id");
+            $result = $this->db->getQueryResult();
+            if (count($result) > 0) { $respuesta = 1; }
+        }
+        return $respuesta;
+    }
+    /******************************************************/
     public function getSesiones($tipo = "json") {
         $this->db->select("sesion", "*", null, "usuario_id = $this->usuario_id");
         $resultado = $this->db->getQueryResult();
