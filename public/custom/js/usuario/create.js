@@ -39,6 +39,9 @@ function validarDatos() {
     var inputNacimiento = document.getElementById("in-reniec-fnacimiento");
     var inputEmail = document.getElementById("in-usuario-email");
 
+    var selPais = document.getElementById("sel-usuario-pais");
+    var inputNroDocumento = document.getElementById("in-usuario-dni");
+
     var errores = 0, textoError = "";
     /* validaciones */
 
@@ -92,6 +95,20 @@ function validarDatos() {
         activarQuitarEstadoError(inputNacimiento, 'activar', textoError);
         errores++;
         if (errores === 1) inputNacimiento.focus();
+    }
+
+    if (selPais.value === "") {
+        textoError = "Seleccione un país";
+        activarQuitarEstadoError(selPais, 'activar', textoError);
+        errores++;
+        if (errores === 1) selPais.focus();
+    }
+
+    if (inputNroDocumento.value === "") {
+        textoError = "Ingrese un número de documento";
+        activarQuitarEstadoError(inputNroDocumento, 'activar', textoError);
+        errores++;
+        if (errores === 1) inputNroDocumento.focus();
     }
     
     if (inputEmail.value.trim() === "") {

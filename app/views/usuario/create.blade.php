@@ -1,3 +1,5 @@
+@php $paises = listarPaises(); @endphp
+
 @extends('layouts.basic')
 
 @section('title', $titulo)
@@ -79,6 +81,25 @@
                                         <label for="in-usuario-email" class="control-label">Email</label>
                                         <input type="email" class="form-control" id="in-usuario-email" name="in-usuario-email" maxlength="45" placeholder="Ingrese email válido">
                                         <span id="error-usuario-email" class="fields-errors"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group position-relative">
+                                        <label for="sel-usuario-pais" class="control-label">País</label>
+                                        <select class="form-control" name="sel-usuario-pais" id="sel-usuario-pais">
+                                            <option value="">Seleccionar país</option>
+                                            @foreach ($paises as $pai)
+                                                <option value="{{$pai}}">{{$pai}}</option>
+                                            @endforeach
+                                        </select>
+                                        <span id="error-usuario-pais" class="fields-errors"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group position-relative">
+                                        <label for="in-usuario-dni" class="control-label">Documento Nacional de Identidad</label>
+                                        <input type="text" class="form-control" id="in-usuario-dni" name="in-usuario-dni" maxlength="45" placeholder="DNI N° 06277610">
+                                        <span id="error-usuario-dni" class="fields-errors"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6"></div>

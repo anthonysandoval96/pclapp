@@ -93,6 +93,9 @@ class Usuarios extends Controller {
         $post_email = (trim($sesion_register['in-usuario-email']) !== "") ? trim($sesion_register['in-usuario-email']) : null;
         $post_celular = (trim($sesion_register['in-usuario-celular']) !== "") ? trim($sesion_register['in-usuario-celular']) : null;
 
+        $post_pais = (trim($sesion_register['sel-usuario-pais']) !== "") ? trim($sesion_register['sel-usuario-pais']) : null;
+        $post_nrodocumento = (trim($sesion_register['in-usuario-dni']) !== "") ? trim($sesion_register['in-usuario-dni']) : null;
+
         /* Generar el username automaticamente con los datos ingresados */
         $primera_letra_nombre = mb_substr($post_nombres, 0, 1, "UTF-8");
         $primera_letra_apmaterno = mb_substr($post_apmaterno, 0, 1, "UTF-8");
@@ -107,7 +110,7 @@ class Usuarios extends Controller {
         
         $password = substr(md5(microtime()), 1, 10);
         
-        $sql = "INSERT INTO persona (nombres, apellido_paterno, apellido_materno, fecha_nacimiento, direccion, email, celular) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO persona (nombres, apellido_paterno, apellido_materno, fecha_nacimiento, pais, numero_documento, direccion, email, celular) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $sql2 = "INSERT INTO usuario (username, password, persona_id, created) VALUES (?, ?, ?, ?)";
         
         $nombre_lector = $post_nombres . " " . $post_appaterno . " " . $post_apmaterno;
@@ -122,11 +125,13 @@ class Usuarios extends Controller {
                 throw new Exception('Error al registrar datos del empleado.');
             }
             $sql->bind_param(
-                "sssssss",
+                "sssssssss",
                 $post_nombres,
                 $post_appaterno,
                 $post_apmaterno,
                 $post_fechanac,
+                $post_pais,
+                $post_nrodocumento,
                 $post_direccion,
                 $post_email,
                 $post_celular
