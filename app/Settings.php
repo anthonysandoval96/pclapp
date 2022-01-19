@@ -1,6 +1,6 @@
 <?php
 /* NO OLVIDAR CAMBIAR LA RUTA EN EL .HTACCESS.*/
-define('TIPO_DESARROLLO', 'LOCAL'); /* LOCAL O SERVIDOR*/
+define('TIPO_DESARROLLO', 'SERVIDOR'); /* LOCAL O SERVIDOR*/
 define('APP_NAME', 'PROGRAMA DE LECTURA');
 if (TIPO_DESARROLLO == "LOCAL") {
     /**************** VARIABLES EN LOCAL ****************/
@@ -10,7 +10,7 @@ if (TIPO_DESARROLLO == "LOCAL") {
     define('DB_PASSWORD', '');
     define('DB_NOMBRE', 'applectura_bd');
     /****************************************************/
-    define('PROJECT_NAME', '/applectura'); /* SIRVE PARA EL GLOBAL.JS */
+    define('PROJECT_NAME', '/pclapp'); /* SIRVE PARA EL GLOBAL.JS */
     define('BASE_URL', 'http://localhost' . PROJECT_NAME . '/');
     define('RUTA_ARCHIVE', $_SERVER["DOCUMENT_ROOT"] . PROJECT_NAME . "/public/custom/");
 } else if (TIPO_DESARROLLO == "SERVIDOR") {

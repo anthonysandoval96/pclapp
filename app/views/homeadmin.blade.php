@@ -16,14 +16,19 @@
             </div>
         </div>
         <div class="row py-4">
-            <div class="col-12 col-md-6 text-center mb-3">
+            <div class="col-12 col-md-4 text-center mb-3">
                 <a href="{{BASE_URL}}usuario/manage" class="btn border-success">
                     <i class="fas fa-users-cog mr-2"></i>Administrar Usuarios
                 </a>
             </div>
-            <div class="col-12 col-md-6 text-center mb-3">
+            <div class="col-12 col-md-4 text-center mb-3">
                 <a href="{{BASE_URL}}palabra" class="btn border-success">
                     <i class="far fa-file-alt mr-2"></i>Administrar Palabras
+                </a>
+            </div>
+            <div class="col-12 col-md-4 text-center mb-3">
+                <a href="{{BASE_URL}}usuario/precios" class="btn border-success">
+                    <i class="fas fa-money-bill-alt mr-2"></i>Administrar Precios
                 </a>
             </div>
             <!-- /.col-md-6 -->

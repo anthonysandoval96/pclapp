@@ -27,13 +27,19 @@ function loadDataTable() {
             { data: "nombres", className: "text-center white-space" },
             { data: "apellido_paterno", className: "text-center white-space" },
             { data: "apellido_materno", className: "text-center white-space" },
-            { data: "nombre", className: "text-center wh-sp",
+            { data: "nombre", className: "text-center white-space",
                 render: function(data) { if (data === "") { return "<span class='text-muted'>No disponible</span>"; } else { return data; } } 
             },
-            { data: "username", className: "text-center wh-sp",
+            { data: "username", className: "text-center white-space",
                 render: function(data) { if (data === "") { return "<span class='text-muted'>No disponible</span>"; } else { return data; } } 
             },
-            { data: "created", className: "text-center wh-sp",
+            { data: "email", className: "text-center white-space",
+                render: function(data) { if (data === "") { return "<span class='text-muted'>No disponible</span>"; } else { return data; } } 
+            },
+            { data: "celular", className: "text-center white-space",
+                render: function(data) { if (data === "") { return "<span class='text-muted'>No disponible</span>"; } else { return data; } } 
+            },
+            { data: "created", className: "text-center white-space",
                 render: function(data) { 
                     if (data === "") { 
                         return "<span class='text-muted'>No disponible</span>"; 

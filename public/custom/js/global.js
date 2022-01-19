@@ -249,7 +249,7 @@ function alerts(tipo, mensaje, title = '') {
             Swal.fire({
                 type: 'success',
                 title: 'Buen trabajo!',
-                text: mensaje,
+                html: mensaje,
                 showConfirmButton: true
             });
             break;

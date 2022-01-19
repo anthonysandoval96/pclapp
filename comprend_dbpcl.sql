@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 05-10-2021 a las 04:32:12
--- Versión del servidor: 10.3.30-MariaDB-cll-lve
--- Versión de PHP: 7.3.30
+-- Tiempo de generación: 19-01-2022 a las 20:56:13
+-- Versión del servidor: 10.3.32-MariaDB-cll-lve
+-- Versión de PHP: 7.3.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -21,6 +21,25 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `comprend_dbpcl`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `configuracion`
+--
+
+CREATE TABLE `configuracion` (
+  `id` int(11) NOT NULL,
+  `p_soles` decimal(5,2) NOT NULL,
+  `p_dolares` decimal(5,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `configuracion`
+--
+
+INSERT INTO `configuracion` (`id`, `p_soles`, `p_dolares`) VALUES
+(1, 9.00, 2.31);
 
 -- --------------------------------------------------------
 
@@ -49,7 +68,22 @@ INSERT INTO `historial` (`id`, `usuario_id`, `palabra_id`, `aprendida`) VALUES
 (7, 3, 99, 'conocida'),
 (8, 3, 144, 'conocida'),
 (9, 3, 158, 'conocida'),
-(10, 3, 161, 'conocida');
+(10, 3, 161, 'conocida'),
+(11, 3, 79, 'conocida'),
+(12, 3, 88, 'conocida'),
+(13, 3, 157, 'conocida'),
+(14, 3, 184, 'conocida'),
+(15, 3, 16, 'conocida'),
+(16, 3, 34, 'conocida'),
+(17, 3, 87, 'conocida'),
+(18, 3, 98, 'conocida'),
+(19, 3, 123, 'conocida'),
+(20, 3, 135, 'conocida'),
+(21, 3, 139, 'conocida'),
+(22, 3, 141, 'conocida'),
+(23, 3, 162, 'conocida'),
+(24, 3, 168, 'conocida'),
+(25, 3, 189, 'conocida');
 
 -- --------------------------------------------------------
 
@@ -349,7 +383,7 @@ CREATE TABLE `sesion` (
 INSERT INTO `sesion` (`id`, `usuario_id`, `sesion`, `linea`, `letra`, `terminado`, `asignado`, `parte`) VALUES
 (1, 1, 1, 1, 1, 0, 1, 1),
 (2, 2, 1, 1, 1, 0, 1, 1),
-(3, 3, 1, 4, 1, 0, 1, 2);
+(3, 3, 1, 6, 1, 0, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -427,26 +461,26 @@ INSERT INTO `temporal` (`sesion_id`, `palabra_id`, `checked`) VALUES
 (2, 179, 0),
 (2, 180, 0),
 (2, 181, 0),
-(3, 5, 0),
-(3, 18, 0),
-(3, 33, 0),
-(3, 50, 0),
-(3, 53, 0),
-(3, 70, 0),
-(3, 79, 1),
-(3, 88, 1),
-(3, 98, 0),
-(3, 145, 0),
-(3, 147, 0),
-(3, 148, 0),
-(3, 157, 1),
-(3, 159, 0),
-(3, 184, 0),
-(3, 188, 0),
-(3, 190, 0),
+(3, 27, 0),
+(3, 32, 0),
+(3, 44, 0),
+(3, 46, 0),
+(3, 52, 0),
+(3, 63, 0),
+(3, 67, 0),
+(3, 69, 0),
+(3, 75, 0),
+(3, 78, 0),
+(3, 90, 0),
+(3, 103, 0),
+(3, 112, 0),
+(3, 133, 0),
+(3, 143, 0),
+(3, 155, 0),
+(3, 173, 0),
 (3, 192, 0),
-(3, 197, 0),
-(3, 200, 0);
+(3, 193, 0),
+(3, 202, 0);
 
 -- --------------------------------------------------------
 
@@ -471,13 +505,19 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`id`, `username`, `password`, `avatar`, `persona_id`, `rol_id`, `estado`, `created`) VALUES
 (1, 'admin', '$2y$10$.LIGIkbWbXEbwIRa4ffOq.lGIgto8vWHeiBjdcDKkgFKfVoOnAZSi', 'avatar.png', 1, 1, 1, '2021-06-20'),
-(2, 'amosqueras', '$2y$10$Rwi4pf53C18xMt6P0PRYpuOst3gXPRVye./oDrRyX/6n/WZc.7S46', 'avatar.png', 2, 2, 1, '2021-07-17'),
-(3, 'abocanegraa', '$2y$10$MgWRYUW5UjNbri/Zvw51ne1l.KAU8prjDBi3mq61sVi/ZdLgRPGsi', 'avatar.png', 3, 2, 1, '2021-08-07'),
-(4, 'ecorrear', '$2y$10$qVKptPlEc/3rGe065ndrb.GxG8D50.UkGRTjRJgVkXlQgjoHBIkwu', 'avatar.png', 4, 2, 1, '2021-10-02');
+(2, 'amosqueras', '$2y$10$.LIGIkbWbXEbwIRa4ffOq.lGIgto8vWHeiBjdcDKkgFKfVoOnAZSi', 'avatar.png', 2, 2, 1, '2021-07-17'),
+(3, 'abocanegraa', '$2y$10$Rwi4pf53C18xMt6P0PRYpuOst3gXPRVye./oDrRyX/6n/WZc.7S46', 'avatar.png', 3, 2, 1, '2021-08-07'),
+(4, 'ecorrear', '$2a$12$AGFEAzuu8SgFetjHe51JfuuBJoIO.Ot9HIvsQFQKRLmuERKIOjamu', 'avatar.png', 4, 2, 1, '2021-10-02');
 
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `configuracion`
+--
+ALTER TABLE `configuracion`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `historial`
@@ -533,10 +573,16 @@ ALTER TABLE `usuario`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `configuracion`
+--
+ALTER TABLE `configuracion`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT de la tabla `historial`
 --
 ALTER TABLE `historial`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de la tabla `palabra`

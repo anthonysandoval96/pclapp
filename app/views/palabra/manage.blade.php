@@ -18,6 +18,9 @@
             </div>
         </div>
         <div class="row pb-5">
+            <div class="col-md-12 text-center pb-3">
+                <b class="text-primary">Registro de palabras que existen en la app.</b>
+            </div>
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header text-center px-3 py-2">

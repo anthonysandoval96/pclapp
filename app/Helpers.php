@@ -156,7 +156,7 @@ function calculaedad($fechanacimiento){
     return $ano_diferencia;
 }
 
-function estructura_mensaje($nombre, $username, $pass) {
+function estructura_mensaje_bienvenida($nombre, $username, $pass) {
     $html = "
         <p><font size='4'>Hola <b>". $nombre ."</b>.</font></p>
         <p><font size='4'>Queremos darle la bienvenida a nuestra familia de <b>APP PCL</b>.</font></p>
@@ -167,6 +167,26 @@ function estructura_mensaje($nombre, $username, $pass) {
         </ul>
     ";
     return $html;
+}
+
+function estructura_mensaje_recuperpass($nombre, $username, $pass) {
+    $html = "
+        <p><font size='4'>Hola <b>". $nombre ."</b>.</font></p>
+        <p><font size='4'>Nos haz solicitado reestablecer tu contraseña.</font></p>
+        <p><font size='4'>A continuación se le brinda sus nuevas creedenciales de acceso:</font></p>
+        <ul>
+            <li><font size='4'><b>username:</b> ".$username."</font></li>
+            <li><font size='4'><b>contraseña:</b> ".$pass."</font></li>
+        </ul>
+    ";
+    return $html;
+}
+
+function datosConfiguracion() {
+    $Database = new Database();
+    $Database->select("configuracion", "*", null, "id = 1");
+    $result = $Database->getQueryResult()[0];
+    return $result;
 }
 
 function datosPrincipales() {

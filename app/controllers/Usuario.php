@@ -16,11 +16,21 @@ class Usuario extends Controller {
             $data = ['title' => 'Login'];
             $this->view('access/login', $data);
         } else {
-            $data = [
-                'title' => $this->title_route_main,
-                'controller' => $this->route_view
-            ];
-            $this->view($this->route_view.'/manage', $data);
+            if (!$this->currentModel->isAdmin()) {
+                $data = [
+                    'title' => 'Bienvenido',
+                    'controller' => 'home',
+                    'userlogued' => $this->currentModel->userLoggedData()
+                ];
+                $this->view('home', $data);
+            } else {
+                $data = [
+                    'title' => $this->title_route_main,
+                    'controller' => $this->route_view
+                ];
+                $this->view($this->route_view.'/manage', $data);
+            }
+            
         }
     }
     /******************************************************/
@@ -29,8 +39,17 @@ class Usuario extends Controller {
             $data = ['title' => 'Login'];
             $this->view('access/login', $data);
         } else {
-            $this->response = $this->currentModel->getUsuariosAll();
-            print_r($this->response);
+            if (!$this->currentModel->isAdmin()) {
+                $data = [
+                    'title' => 'Bienvenido',
+                    'controller' => 'home',
+                    'userlogued' => $this->currentModel->userLoggedData()
+                ];
+                $this->view('home', $data);
+            } else {
+                $this->response = $this->currentModel->getUsuariosAll();
+                print_r($this->response);
+            }
         }
     }
     /******************************************************/
@@ -90,6 +109,48 @@ class Usuario extends Controller {
         } else {
             $this->response = $this->currentModel->cambiarContrasena();
             $this->process_result('update');
+        }
+    }
+    /******************************************************/
+    public function precios() {
+        if (!$this->currentModel->accessPermission()) {
+            $data = ['title' => 'Login'];
+            $this->view('access/login', $data);
+        } else {
+            if (!$this->currentModel->isAdmin()) {
+                $data = [
+                    'title' => 'Bienvenido',
+                    'controller' => 'home',
+                    'userlogued' => $this->currentModel->userLoggedData()
+                ];
+                $this->view('home', $data);
+            } else {
+                $data = [
+                    'title' => 'Administrar Precios',
+                    'controller' => $this->route_view,
+                    'configuracion' => $this->currentModel->getConfiguracion('array')
+                ];
+                $this->view($this->route_view . "/precios", $data);
+            }
+        }
+    }
+    /******************************************************/
+    public function updatePrecio() {
+        if (!$this->currentModel->accessPermission()) {
+            $data = ['title' => 'Login'];
+            $this->view('access/login', $data);
+        } else {
+            if (!$this->currentModel->isAdmin()) {
+                $data = [
+                    'title' => 'Bienvenido',
+                    'controller' => 'home',
+                    'userlogued' => $this->currentModel->userLoggedData()
+                ];
+                $this->view('home', $data);
+            } else {
+                $this->response = $this->currentModel->actualizarPrecio();
+                $this->process_result('update');
+            }
         }
     }
 }

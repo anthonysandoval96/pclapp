@@ -43,5 +43,18 @@ class Login extends Controller {
         unset($_SESSION["sesion_diaria"]);
         session_destroy();
     }
+    /******************************************************/
+    public function forgot() {
+        $data = [
+            'title' => 'Recuperar contraseña',
+            'controller' => $this->route_view
+        ];
+        $this->view($this->route_view . '/forgot', $data);
+    }
+
+    public function recuperarContrasena() {
+        $this->response = $this->usuarioModelo->recuperarContrasena();
+        $this->process_result('update');
+    }
 
 }

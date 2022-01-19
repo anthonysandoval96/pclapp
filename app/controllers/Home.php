@@ -18,14 +18,7 @@ class Home extends Controller {
             $data = ['title' => 'Login'];
             $this->view('access/login', $data);
         } else {
-            if ($this->usuario_id == 1) {
-                $data = [
-                    'title' => $this->title_route_main,
-                    'controller' => $this->route_view,
-                    'userlogued' => $this->usuarioModelo->userLoggedData()
-                ];
-                $this->view($this->route_view.'admin', $data);
-            } else {
+            if (!$this->usuarioModelo->isAdmin()) {
                 $this->model("sesiones")->asignarSesion();
                 $data = [
                     'title' => $this->title_route_main,
@@ -33,6 +26,13 @@ class Home extends Controller {
                     'userlogued' => $this->usuarioModelo->userLoggedData()
                 ];
                 $this->view($this->route_view, $data);
+            } else {
+                $data = [
+                    'title' => $this->title_route_main,
+                    'controller' => $this->route_view,
+                    'userlogued' => $this->usuarioModelo->userLoggedData()
+                ];
+                $this->view($this->route_view.'admin', $data);
             }
         }
     }

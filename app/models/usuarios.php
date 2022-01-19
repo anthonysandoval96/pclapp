@@ -39,6 +39,20 @@ class Usuarios extends Controller {
         } else { return $respuesta; }
     }
     /******************************************************/
+    public function isAdmin() {
+        $usuario_id = null;
+        $respuesta = 0;
+        if (isset($_SESSION['usuario_id'])) {
+            $usuario_id = $this->usuario_id;
+            $this->db->select("usuario", "rol_id", null, "id = $usuario_id");
+            $result = $this->db->getQueryResult();
+            if (count($result) > 0) { 
+                if ($result[0]["rol_id"] == 1) $respuesta = 1;
+            }
+        }
+        return $respuesta;
+    }
+    /******************************************************/
     public function accessPermission() {
         $usuario_id = null;
         $respuesta = 0;
@@ -114,7 +128,7 @@ class Usuarios extends Controller {
         $sql2 = "INSERT INTO usuario (username, password, persona_id, created) VALUES (?, ?, ?, ?)";
         
         $nombre_lector = $post_nombres . " " . $post_appaterno . " " . $post_apmaterno;
-        $mensaje = estructura_mensaje($nombre_lector, $username, $password);
+        $mensaje = estructura_mensaje_bienvenida($nombre_lector, $username, $password);
         $subject = "Bienvenido a la APP PCL";
         
         $password = password_hash($password, PASSWORD_DEFAULT);
@@ -297,5 +311,64 @@ class Usuarios extends Controller {
         $transactionUuid = $transaction['uuid'];
 
         return json_encode($formAnswer);
+    }
+
+    public function getConfiguracion($tipo = "json") {
+        $this->db->select("configuracion", "*", null, "id=1");
+        $resultado = $this->db->getQueryResult();
+        if ($tipo == "json") {
+            return '{"data":' . json_encode($resultado) . '}';
+        } else {
+            return $resultado;
+        }
+    }
+    /******************************************************/
+    public function actualizarPrecio() {
+        $post_precio_soles = $_POST["in-precio-soles"];
+        $post_precio_dolares= $_POST["in-precio-dolares"];
+        $id = 1;
+        
+        $mensaje = "Los precios se actualizaron con éxito!";
+ 
+        $sql = "UPDATE configuracion SET p_soles = ?, p_dolares = ? WHERE id = ?";
+        $sql = $this->db->conn->prepare($sql);
+        $sql->bind_param("ddi", $post_precio_soles, $post_precio_dolares, $id);
+        if ($sql->execute()) {
+            return [true, $mensaje];
+        } else { return [false, "Los precios no se lograron actualizar."]; }
+    }
+    /******************************************************/
+    public function recuperarContrasena() {
+        $post_email = $_POST["in-usuario-email"];
+        $post_username = $_POST["in-usuario-username"];
+
+        $mensaje = "El mensaje se envió al correo con éxito!";
+        
+        $select = "U.id, P.nombres, P.apellido_paterno, P.apellido_materno";
+        $where = "P.email = '$post_email' AND U.username = '$post_username'";
+
+        $this->db->select("usuario U", $select, "persona P ON P.id = U.persona_id", $where);
+        $result = $this->db->getQueryResult();
+
+        if ($this->db->getRowsNum() > 0) {
+            $password = substr(md5(microtime()), 1, 10);
+            $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+            $sql = "UPDATE usuario SET password = ? WHERE id = ?";
+            $sql = $this->db->conn->prepare($sql);
+            $sql->bind_param("si", $password_hash, $result[0]['id']);
+            if ($sql->execute()) {
+
+                $nombre_lector = $result[0]["nombres"]." ".$result[0]["apellido_paterno"]." ".$result[0]["apellido_materno"];
+                $mensaje = estructura_mensaje_recuperpass($nombre_lector, $post_username, $password);
+                $subject = "Recuperación de contraseña APP PCL";
+
+                $this->sendMail($post_email, $mensaje, $subject);
+
+                return [true, 'El mensaje se envió al correo: <b class="text-info">' . $post_email . '</b> con éxito!'];
+            } else { return [false, "No se logró enviar y actualizar la contraseña."]; }
+        } else {
+            return [false, "No se encontró ningún registro con los datos ingresados!"];
+        }
     }
 }

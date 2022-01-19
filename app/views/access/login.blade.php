@@ -40,7 +40,7 @@
                 </form>
                 <div id="eventos-campos-login" class="row text-center text-danger"></div>
                 <div class="text-center">
-                    <a href="{{ BASE_URL }}login">Olvidé mi contraseña</a>
+                    <a href="{{ BASE_URL }}login/forgot">Olvidé mi contraseña</a>
                 </div>
                 <div class="text-center mt-3">
                     <a href="{{ BASE_URL }}register" class="d-inline-block h1 border rounded border-info px-3 py-1">

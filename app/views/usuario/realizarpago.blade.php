@@ -5,10 +5,14 @@ if (!isset($_SESSION["user_register"])) exit("No ingresaste ninguno de los datos
 
 $client = new Lyra\Client();
 
+
+$config = datosConfiguracion();
+$soles = $config["p_soles"] * 100;
+$dolares = $config["p_dolares"] * 100;
 /**
 * I create a formToken
 */
-$store = array("amount" => 1,
+$store = array("amount" => $soles,
 "currency" => "PEN",
 "orderId" => uniqid("MyOrderId"),
 "customer" => array("email" => $_SESSION["user_register"]["in-usuario-email"])

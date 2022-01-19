@@ -17,11 +17,20 @@ class Palabra extends Controller {
             $data = ['title' => 'Login'];
             $this->view('access/login', $data);
         } else {
-            $data = [
-                'title' => $this->title_route_main,
-                'controller' => $this->route_view
-            ];
-            $this->view($this->route_view."/manage", $data);
+            if (!$this->usuarioModelo->isAdmin()) {
+                $data = [
+                    'title' => 'Bienvenido',
+                    'controller' => 'home',
+                    'userlogued' => $this->usuarioModelo->userLoggedData()
+                ];
+                $this->view('home', $data);
+            } else {
+                $data = [
+                    'title' => $this->title_route_main,
+                    'controller' => $this->route_view
+                ];
+                $this->view($this->route_view."/manage", $data);
+            }
         }
     }
     /******************************************************/
@@ -30,8 +39,17 @@ class Palabra extends Controller {
             $data = ['title' => 'Login'];
             $this->view('access/login', $data);
         } else {
-            $this->response = $this->currentModel->getPalabrasAll();
-            print_r($this->response);
+            if (!$this->usuarioModelo->isAdmin()) {
+                $data = [
+                    'title' => 'Bienvenido',
+                    'controller' => 'home',
+                    'userlogued' => $this->usuarioModelo->userLoggedData()
+                ];
+                $this->view('home', $data);
+            } else {
+                $this->response = $this->currentModel->getPalabrasAll();
+                print_r($this->response);
+            }
         }
     }
     /******************************************************/
@@ -40,8 +58,17 @@ class Palabra extends Controller {
             $data = ['title' => 'Login'];
             $this->view('access/login', $data);
         } else {
-            $this->response = $this->currentModel->editar();
-            $this->process_result('update', 'f');
+            if (!$this->usuarioModelo->isAdmin()) {
+                $data = [
+                    'title' => 'Bienvenido',
+                    'controller' => 'home',
+                    'userlogued' => $this->usuarioModelo->userLoggedData()
+                ];
+                $this->view('home', $data);
+            } else {
+                $this->response = $this->currentModel->editar();
+                $this->process_result('update', 'f');
+            }
         }
     }
     /******************************************************/
@@ -50,8 +77,17 @@ class Palabra extends Controller {
             $data = ['title' => 'Login'];
             $this->view('access/login', $data);
         } else {
-            $this->response = $this->currentModel->eliminar($id);
-            $this->process_result('delete', 'f');
+            if (!$this->usuarioModelo->isAdmin()) {
+                $data = [
+                    'title' => 'Bienvenido',
+                    'controller' => 'home',
+                    'userlogued' => $this->usuarioModelo->userLoggedData()
+                ];
+                $this->view('home', $data);
+            } else {
+                $this->response = $this->currentModel->eliminar($id);
+                $this->process_result('delete', 'f');
+            }
         }
     }
     /******************************************************/
@@ -60,8 +96,17 @@ class Palabra extends Controller {
             $data = ['title' => 'Login'];
             $this->view('access/login', $data);
         } else {
-            $this->response = $this->currentModel->previsualizar();
-            echo json_encode($this->response);
+            if (!$this->usuarioModelo->isAdmin()) {
+                $data = [
+                    'title' => 'Bienvenido',
+                    'controller' => 'home',
+                    'userlogued' => $this->usuarioModelo->userLoggedData()
+                ];
+                $this->view('home', $data);
+            } else {
+                $this->response = $this->currentModel->previsualizar();
+                echo json_encode($this->response);
+            }
         }
     }
     /******************************************************/
@@ -70,8 +115,17 @@ class Palabra extends Controller {
             $data = ['title' => 'Login'];
             $this->view('access/login', $data);
         } else {
-            $this->response = $this->currentModel->migracion_bd();
-            $this->process_result('create');
+            if (!$this->usuarioModelo->isAdmin()) {
+                $data = [
+                    'title' => 'Bienvenido',
+                    'controller' => 'home',
+                    'userlogued' => $this->usuarioModelo->userLoggedData()
+                ];
+                $this->view('home', $data);
+            } else {
+                $this->response = $this->currentModel->migracion_bd();
+                $this->process_result('create');
+            }
         }
     }
 }

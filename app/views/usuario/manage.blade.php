@@ -9,7 +9,7 @@
 
 @section('content')
 <section class="content pt-3">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row mb-3">
             <div class="col-12 col-md-6 m-auto text-center">
                 <a href="{{BASE_URL}}home" class="btn btn-info">
@@ -18,6 +18,9 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-md-12 text-center pb-3">
+                <b class="text-primary">Registro de usuarios que ya pagaron la licencia de la app.</b>
+            </div>
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header text-center px-3 py-2">
@@ -30,7 +33,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body px-3 pt-3 pb-2">
-                        <div class="table-responsive" style="overflow-x: initial;">
+                        <div class="table-responsive">
                             <div class="text-center"><div class="spinner-border {{$controller}} text-secondary"></div></div>
                             <table id="table-{{getPluralPrase($controller)}}" class="table table-bordered table-hover table-custom d-none">
                                 <thead>
@@ -41,6 +44,8 @@
                                         <th>Ap. Materno</th>
                                         <th>Rol</th>
                                         <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Celular</th>
                                         <th>F. Creación</th>
                                         <th>Estado</th>
                                         {{-- <th>Acciones</th> --}}

@@ -1,1 +1,0 @@
-<?php /**PATH C:\xampp\htdocs\applectura\app\views/layouts/includes/footer.blade.php ENDPATH**/ ?>
