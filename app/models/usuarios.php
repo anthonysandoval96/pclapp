@@ -71,6 +71,12 @@ class Usuarios extends Controller {
         if ($tipo == "json") {
             return '{"data":' . json_encode($resultado) . '}';
         } else {
+            $fecha_ingreso = $resultado[0]["fecha_ingreso"];
+            $fechaActual = date('Y-m-d');
+            if ($fecha_ingreso < $fechaActual) {
+                $sql2 = "UPDATE sesion SET control_diario = 1 WHERE usuario_id = $this->usuario_id";
+                $this->db->obtenerColumnaSql($sql2);
+            }
             return getPorcentajesSesiones($resultado[0]);
         }
     }

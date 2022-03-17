@@ -25,7 +25,8 @@ class Sesiones extends Controller {
         $sesion = $array['sesion'];
         $linea = $array['linea'];
         $letra = $array['letra'];
-        $sql = "INSERT INTO sesion (usuario_id, sesion, linea, letra) VALUES ($usuario_id, $sesion, $linea, $letra)";
+        $fechaActual = date('Y-m-d');
+        $sql = "INSERT INTO sesion (usuario_id, sesion, linea, letra, fecha_ingreso) VALUES ($usuario_id, $sesion, $linea, $letra, '$fechaActual')";
         $this->db->obtenerColumnaSql($sql, false);
         return $array;
     }
@@ -88,27 +89,41 @@ class Sesiones extends Controller {
         $sesion_diaria = $_SESSION["sesion_diaria"];
 
         $resp = ["respuesta" => true];
-
-        if ($sesion_diaria["asignado"] == 0 && $sesion_diaria["parte"] == 1) $resp =  $this->asignarPalabras();
+        
+        if ($sesion_diaria["asignado"] == 0) $resp =  $this->asignarPalabras();
+        
+        // return print_r($resp);
 
         return array_merge($resp, $sesion_diaria);
     }
     /******************************************************/
     public function asignarPalabras() {
         $respuesta = [];
-        $palabras_aleatorias = $this->algortimoAleatorioDePalabras();
-        if ($palabras_aleatorias) {
-            $sesion_id = $_SESSION["sesion_diaria"]["id"];
-            for ($i=0; $i < count($palabras_aleatorias); $i++) {
-                $p_id = $palabras_aleatorias[$i]["id"];
-                $sql = "INSERT INTO temporal (sesion_id, palabra_id) VALUES ($sesion_id, $p_id)";
-                $this->db->obtenerColumnaSql($sql, false);
+        $sql0 = "SELECT fecha_ingreso, sesion_termino, control_diario FROM sesion WHERE usuario_id = $this->usuario_id";
+        $validator = $this->db->obtenerColumnaSql($sql0, false)[0];
+        $fecha_ingreso = $validator['fecha_ingreso'];
+        // echo $validator['sesion_termino'];
+        $control_diario = $validator['control_diario'];
+        $fechaActual = date('Y-m-d');
+        if ( (($fecha_ingreso == $fechaActual) && ($control_diario == 1)) || 
+             (($fecha_ingreso !== $fechaActual) && ($control_diario == 1)) ) {
+            $palabras_aleatorias = $this->algortimoAleatorioDePalabras();
+            if ($palabras_aleatorias) {
+                $sesion_id = $_SESSION["sesion_diaria"]["id"];
+                for ($i=0; $i < count($palabras_aleatorias); $i++) {
+                    $p_id = $palabras_aleatorias[$i]["id"];
+                    $sql = "INSERT INTO temporal (sesion_id, palabra_id) VALUES ($sesion_id, $p_id)";
+                    $this->db->obtenerColumnaSql($sql, false);
+                }
+                
+                $sql2 = "UPDATE sesion SET asignado = 1";
+                $sql2 .= ", fecha_ingreso = '$fechaActual'";
+                $sql2 .= " WHERE id = $sesion_id";
+                $this->db->obtenerColumnaSql($sql2, false);
+                $respuesta["respuesta"] = true;
+            } else {
+                $respuesta["respuesta"] = false;
             }
-            $sql2 = "UPDATE sesion SET asignado = 1 WHERE id = $sesion_id";
-            $this->db->obtenerColumnaSql($sql2, false);
-            $respuesta["respuesta"] = true;
-        } else {
-            $respuesta["respuesta"] = false;
         }
         return $respuesta;
     } 
@@ -140,9 +155,11 @@ class Sesiones extends Controller {
     
             if ($linea < 15) {
                 $linea = $linea + 1;
+                $control_diario = 1;
             } else {
-                $sesion = $sesion + 1;
+                $newsesion = $sesion + 1;
                 $linea = 1;
+                $control_diario = 0;
             }
             
             if (isset($_POST["check-word"]) && !empty($_POST["check-word"])) {
@@ -150,7 +167,7 @@ class Sesiones extends Controller {
                 $array_palabras = $_POST["check-word"];
                 
                 $sql1 = "INSERT INTO historial (usuario_id, palabra_id, aprendida) VALUES (?, ?, ?)";
-                $sql2 = "UPDATE sesion SET sesion = ?, linea = ?, letra = 1, asignado = 0, parte = 1 WHERE id = ?";
+                $sql2 = "UPDATE sesion SET sesion = ?, linea = ?, letra = 1, asignado = 0, parte = 1, control_diario = ?, sesion_termino = ? WHERE id = ?";
                 $sql3 = "DELETE FROM temporal WHERE sesion_id = ?";
                 
                 try {
@@ -167,7 +184,66 @@ class Sesiones extends Controller {
                     if (!$sql2 = $this->db->conn->prepare($sql2)) {
                         throw new Exception('Error al registrar segundo step.');
                     }
-                    $sql2->bind_param("iii", $sesion, $linea, $id);
+                    $sql2->bind_param("iibii", $newsesion, $linea, $control_diario, $sesion, $id);
+                    $sql2->execute();
+                    if (!$sql3 = $this->db->conn->prepare($sql3)) {
+                        throw new Exception('Error al registrar segundo step.');
+                    }
+                    $sql3->bind_param("i", $id);
+                    $sql3->execute();
+                    return $this->db->conn->commit();
+                } catch (Exception $ex) {
+                    $this->db->conn->rollback();
+                    return $ex->getMessage();
+                } 
+            }
+        }
+    }
+    /*************************************************/
+    public function updateSesionSelectAll() {
+        /* sesion.id = 0 / sesion.sesion = 1 / sesion.linea = 2 / sesion.letra = 3 / sesion.parte = 4 */
+        
+        if (!empty($_POST["sesion-data"])) {
+
+            $sesion_data = base64_decode($_POST["sesion-data"]);
+
+            $id = explode(",", $sesion_data)[0];
+            $sesion = explode(",", $sesion_data)[1];
+            $linea = explode(",", $sesion_data)[2];
+            $letra = explode(",", $sesion_data)[3];
+    
+            if ($linea < 15) {
+                $linea = $linea + 1;
+                $control_diario = 1;
+            } else {
+                $newsesion = $sesion + 1;
+                $linea = 1;
+                $control_diario = 0;
+            }
+            
+            if (isset($_POST["check-word"]) && !empty($_POST["check-word"])) {
+
+                $array_palabras = $_POST["check-word"];
+                
+                $sql1 = "INSERT INTO historial (usuario_id, palabra_id, aprendida) VALUES (?, ?, ?)";
+                $sql2 = "UPDATE sesion SET sesion = ?, linea = ?, letra = ?, asignado = 0, parte = 1, control_diario = ?, sesion_termino = ? WHERE id = ?";
+                $sql3 = "DELETE FROM temporal WHERE sesion_id = ?";
+                
+                try {
+                    $this->db->conn->autocommit(false);
+                    if (!$sql1 = $this->db->conn->prepare($sql1)) {
+                        throw new Exception('Error al registrar primer step.');
+                    }
+                    $aprendida = "conocida";
+                    for ($i = 0; $i < count($array_palabras); $i++) {
+                        $p_id = $array_palabras[$i];
+                        $sql1->bind_param("iis", $this->usuario_id, $p_id, $aprendida);
+                        $sql1->execute();
+                    }
+                    if (!$sql2 = $this->db->conn->prepare($sql2)) {
+                        throw new Exception('Error al registrar segundo step.');
+                    }
+                    $sql2->bind_param("iiibii", $newsesion, $linea, $letra, $control_diario, $sesion, $id);
                     $sql2->execute();
                     if (!$sql3 = $this->db->conn->prepare($sql3)) {
                         throw new Exception('Error al registrar segundo step.');
@@ -193,7 +269,7 @@ class Sesiones extends Controller {
             $sesion_id = $sesion_diaria["id"];
             $sesion_letra = $sesion_diaria["letra"];
 
-            if ($sesion_letra > 0 && $sesion_letra < 3) {
+            if ($sesion_letra > 0 && $sesion_letra < 5) {
 
                 $new_sesion_letra = $sesion_letra + 1;
                 
@@ -214,7 +290,7 @@ class Sesiones extends Controller {
                 return [true, "Ya que no conoces ninguna palabra listada, cambiaremos por otro grupo de palabras (<b>".getLetterLine($new_sesion_letra)."</b>)!"];
 
             } else {
-                return [false, "Solo puedes cambiar de grupo de palabras 3 veces (<b>".getLetterLine($sesion_letra)."</b>)."];
+                return [false, "Solo puedes cambiar de grupo de palabras 5 veces (<b>".getLetterLine($sesion_letra)."</b>)."];
             }
 
         } else {

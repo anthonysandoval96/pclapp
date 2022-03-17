@@ -1,24 +1,24 @@
-@extends('layouts.app')
 
-@section('title', $titulo)
 
-@php
+<?php $__env->startSection('title', $titulo); ?>
+
+<?php
     if (isset($_SESSION["sesion_diaria"])) {
         $sesion_diaria = $_SESSION["sesion_diaria"];
     } else {
         $sesion_diaria = [];
     }
 
-@endphp
+?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <!-- Main content -->
 <div class="content px-2">
     <div id="body-palabras" class="container">
         <div class="row">
             <form class="col-md-7 m-auto" id="form-sesiones" name="form-sesiones">
                 <div id="instrucciones" class="py-4 text-center h5"></div>
-                <div class="text-center my-2"><div class="spinner-border {{$controller}} text-info"></div></div>
+                <div class="text-center my-2"><div class="spinner-border <?php echo e($controller); ?> text-info"></div></div>
                 <div id="body-palabras-sesion" style="display: none;"></div>
             </form>
         </div>
@@ -98,8 +98,9 @@
 
 </div>
 <!-- /.content -->
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('script')
-    <script src="{{ CUSTOM_ROUTE }}js/{{$controller}}/manage.js?{{CACHE_VERSION}}"></script>
-@endsection
+<?php $__env->startSection('script'); ?>
+    <script src="<?php echo e(CUSTOM_ROUTE); ?>js/<?php echo e($controller); ?>/manage.js?<?php echo e(CACHE_VERSION); ?>"></script>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\pclapp\app\views/sesion/manage.blade.php ENDPATH**/ ?>

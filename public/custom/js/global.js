@@ -348,6 +348,10 @@ function getLetterLine(number) {
         letra = "b";
     } else if (number == 3) {
         letra = "c";
+    } else if (number == 4) {
+        letra = "d";
+    } else if (number == 5) {
+        letra = "e";
     } else {
         return false;
     }

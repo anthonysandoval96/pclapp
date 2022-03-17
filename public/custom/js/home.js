@@ -8,6 +8,7 @@ $(document).ready(function() {
         method: 'POST',
         data: '',
         success: function (data) { 
+            console.log(data);
             var json = JSON.parse(data);
             let bodyhtml = "";
             if (!$.isEmptyObject(json)) {

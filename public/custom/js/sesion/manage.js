@@ -1,4 +1,5 @@
 var body_palabras = $("#body-palabras-sesion");
+var body_instrucciones = $("#instrucciones");
 var modal_significado = $("#significado");
 var modal_instruccion = $("#modal-instruccion");
 $(document).ready(function() {
@@ -46,6 +47,8 @@ $(document).ready(function() {
         if (checkbox_selected_length > 0) {
     
             var dataString = $(this).serialize();
+
+            console.log(atob($("#sesion-data").val()).split(",")[4]);
             
             if (atob($("#sesion-data").val()).split(",")[4] == "0") {
                 $(body_palabras).fadeOut();
@@ -65,19 +68,30 @@ $(document).ready(function() {
                 $(".spinner-border.sesion").parent("div").show();
                 $(".spinner-border.sesion").show();
 
-                $.ajax({
-                    url: PROJECT_NAME + "/sesion/seleccionarPalabrasConocidas",
-                    method: 'POST',
-                    data: dataString,
-                    success: function (data) {
-                        cargarRegistros();
-                    }
-                });
+                if (checkbox_selected_length == checkbox_length) {
+                    console.log("entro");
+                    $.ajax({
+                        url: PROJECT_NAME + "/sesion/actualizarSesionAll",
+                        method: 'POST',
+                        data: dataString,
+                        success: function (data) {
+                            cargarRegistros();
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: PROJECT_NAME + "/sesion/seleccionarPalabrasConocidas",
+                        method: 'POST',
+                        data: dataString,
+                        success: function (data) {
+                            cargarRegistros();
+                        }
+                    });
+                }
             } else {
                 /* Si en la 1era parte se seleccionaron las 20 palabras 
                    en la 2da parte se pasará directo a la parte final */
                 if (checkbox_selected_length == checkbox_length) {
-                    console.log("Actualizar");
                     actualizarParteDeSesion(this, dataString);
                 } else {
                     var html = generate_html_instruccion(3);
@@ -116,23 +130,40 @@ function cargarPalabras(sesion) {
         data: '',
         success: function (data) {
             var resp = JSON.parse(data);
-            
-            let bodyhtml = htmlTablaPalabras(resp, sesion);
-            $(body_palabras).html(bodyhtml).fadeIn(1000);
 
-            if (sesion.respuesta) {
-                let html = "";
-                if (atob($("#sesion-data").val()).split(",")[4] == "1") {
-                    html = generate_html_instruccion(1);
-                } else if (atob($("#sesion-data").val()).split(",")[4] == "2")  {
-                    html = generate_html_instruccion(2);
-                } else { return false; }
-                
-                $(modal_instruccion).find(".modal-title").html("Sesión Nº " + sesion.sesion + " - " + "Línea Nº " + sesion.linea);
-                $(modal_instruccion).find('#text-instruccion').html(html);
-                $(modal_instruccion).modal("show");
+            if (sesion.control_diario == 0) {
+                Swal.fire({
+                    title: 'Información',
+                    html: generate_html_instruccion(5),
+                    type: 'info',
+                    showCancelButton: false,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Entendido'
+                }).then((result) => {
+                    window.location.href = BASE_URL+"/home";
+                })
+
+            } else {
+
+                var instrucciones = "<a href='' class='' data-toggle='modal' data-target='#instruc'>Instrucciones generales de uso</a>";
+                $(body_instrucciones).html(instrucciones).fadeIn(900);
+                let bodyhtml = htmlTablaPalabras(resp, sesion);
+                $(body_palabras).html(bodyhtml).fadeIn(1000);
+
+                if (sesion.respuesta) {
+                    let html = "";
+                    if (atob($("#sesion-data").val()).split(",")[4] == "1") {
+                        html = generate_html_instruccion(1);
+                    } else if (atob($("#sesion-data").val()).split(",")[4] == "2")  {
+                        html = generate_html_instruccion(2);
+                    } else { return false; }
+                    
+                    $(modal_instruccion).find(".modal-title").html("Sesión Nº " + sesion.sesion + " - " + "Línea Nº " + sesion.linea);
+                    $(modal_instruccion).find('#text-instruccion').html(html);
+                    $(modal_instruccion).modal("show");
+                }
             }
-
         },
         complete: function () {
             $(".spinner-border.sesion").hide();
@@ -142,7 +173,7 @@ function cargarPalabras(sesion) {
 }
 
 function htmlTablaPalabras(data, sesion) {
-    var sesion_data = sesion.id+","+sesion.sesion+","+sesion.linea+","+sesion.letra+","+sesion.parte;
+    var sesion_data = sesion.id+","+sesion.sesion+","+sesion.linea+","+sesion.letra+","+sesion.parte+","+sesion.control_diario;
 
     var html = 
     `
@@ -251,19 +282,23 @@ function cambiarLetraYpalabras() {
         data: '',
         success: function (data) {
             var json = JSON.parse(data);
+            // if (json.respuesta) cargarRegistros();
             let type = "warning";
-            if (json.respuesta) type = "info";
-            Swal.fire({
-                title: 'Información importante',
-                html: json.mensaje,
-                type: type,
-                showCancelButton: false,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'OK'
-            }).then((result) => {
+            if (!json.respuesta) {
+                Swal.fire({
+                    title: 'Información importante',
+                    html: json.mensaje,
+                    type: type,
+                    showCancelButton: false,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    cargarRegistros();
+                })
+            } else {
                 cargarRegistros();
-            })
+            }
         }
     });
 }
@@ -271,10 +306,11 @@ function cambiarLetraYpalabras() {
 function generate_html_instruccion(num_msg) {
 
     const mensaje = {
-        1: "Seleccione todas palabras que conozca y luego hacer click en <span class='text-success font-weight-bold'>continuar</span>", 
+        1: "Seleccione todas las palabras que conozca y luego hacer click en <span class='text-success font-weight-bold'>continuar</span>", 
         2: "Seleccione una sola palabra para leer su significado en voz alta y luego hacer click en <span class='text-success font-weight-bold'>continuar</span>",
         3: "Necesitas hacer click en una palabra para leer su significado en voz alta!",
-        4: "Ya no hay palabras que no conozcas!"
+        4: "Ya no hay palabras que no conozcas!",
+        5: "Acabaste la sesión completa, te esperamos mañana. <div class='text-center'>Muchas gracias &#128513 !!</div>"
     };
 
     var html = `<p class="text-center">`+mensaje[num_msg]+`</p>`;

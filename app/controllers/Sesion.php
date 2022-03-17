@@ -76,6 +76,16 @@ class Sesion extends Controller {
         }
     }
     /******************************************************/
+    public function actualizarSesionAll() {
+        if (!$this->usuarioModelo->accessPermission()) {
+            $data = ['title' => 'Login'];
+            $this->view('access/login', $data);
+        } else {
+            $this->response = $this->currentModel->updateSesionSelectAll();
+            echo $this->response;
+        }
+    }
+    /******************************************************/
     public function cambiarLetraYpalabras() {
         if (!$this->usuarioModelo->accessPermission()) {
             $data = ['title' => 'Login'];
