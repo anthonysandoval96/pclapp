@@ -48,7 +48,7 @@ $(document).ready(function() {
     
             var dataString = $(this).serialize();
 
-            console.log(atob($("#sesion-data").val()).split(",")[4]);
+            // console.log(atob($("#sesion-data").val()));
             
             if (atob($("#sesion-data").val()).split(",")[4] == "0") {
                 $(body_palabras).fadeOut();
@@ -60,6 +60,7 @@ $(document).ready(function() {
                     method: 'POST',
                     data: dataString,
                     success: function (data) {
+                        console.log('Actualizar Sesion '+data);
                         cargarRegistros();
                     }
                 });
@@ -75,6 +76,7 @@ $(document).ready(function() {
                         method: 'POST',
                         data: dataString,
                         success: function (data) {
+                            console.log('Actualizar actualizarSesionAll '+data);
                             cargarRegistros();
                         }
                     });
@@ -84,6 +86,7 @@ $(document).ready(function() {
                         method: 'POST',
                         data: dataString,
                         success: function (data) {
+                            console.log('Actualizar seleccionarPalabrasConocidas '+data);
                             cargarRegistros();
                         }
                     });
@@ -117,6 +120,7 @@ function cargarRegistros() {
         method: 'POST',
         data: '',
         success: function (data) {
+            console.log(data);
             var json = JSON.parse(data);
             cargarPalabras(json);
         }
@@ -325,7 +329,7 @@ function asignarNuevaDataSesion(el, n = null) {
         data: '',
         success: function (data) {
             var sesion = JSON.parse(data);
-            var sesion_data = sesion.id+","+sesion.sesion+","+sesion.linea+","+sesion.letra+","+sesion.parte;
+            var sesion_data = sesion.id+","+sesion.sesion+","+sesion.linea+","+sesion.letra+","+sesion.parte+","+sesion.control_diario;
             $("#sesion-data").val(btoa(sesion_data));
             if (n == "exep") $(el).submit();
         }

@@ -116,10 +116,8 @@ class Sesiones extends Controller {
                     $this->db->obtenerColumnaSql($sql, false);
                 }
                 
-                $sql2 = "UPDATE sesion SET asignado = 1";
-                $sql2 .= ", fecha_ingreso = '$fechaActual'";
-                $sql2 .= " WHERE id = $sesion_id";
-                $this->db->obtenerColumnaSql($sql2, false);
+                $sql2 = "UPDATE sesion SET asignado = 1 , fecha_ingreso = '$fechaActual' WHERE id = $sesion_id";
+                $this->db->obtenerColumnaSql($sql2);
                 $respuesta["respuesta"] = true;
             } else {
                 $respuesta["respuesta"] = false;
@@ -152,10 +150,12 @@ class Sesiones extends Controller {
             $id = explode(",", $sesion_data)[0];
             $sesion = explode(",", $sesion_data)[1];
             $linea = explode(",", $sesion_data)[2];
-    
+            $control_diario = explode(",", $sesion_data)[5];
+
             if ($linea < 15) {
+                $newsesion = $sesion;
                 $linea = $linea + 1;
-                $control_diario = 1;
+                if ($sesion == 1) $sesion = 0;
             } else {
                 $newsesion = $sesion + 1;
                 $linea = 1;
@@ -184,7 +184,7 @@ class Sesiones extends Controller {
                     if (!$sql2 = $this->db->conn->prepare($sql2)) {
                         throw new Exception('Error al registrar segundo step.');
                     }
-                    $sql2->bind_param("iibii", $newsesion, $linea, $control_diario, $sesion, $id);
+                    $sql2->bind_param("iiiii", $newsesion, $linea, $control_diario, $sesion, $id);
                     $sql2->execute();
                     if (!$sql3 = $this->db->conn->prepare($sql3)) {
                         throw new Exception('Error al registrar segundo step.');
@@ -211,10 +211,12 @@ class Sesiones extends Controller {
             $sesion = explode(",", $sesion_data)[1];
             $linea = explode(",", $sesion_data)[2];
             $letra = explode(",", $sesion_data)[3];
-    
+            $control_diario = explode(",", $sesion_data)[5];
+
             if ($linea < 15) {
+                $newsesion = $sesion;
                 $linea = $linea + 1;
-                $control_diario = 1;
+                if ($sesion == 1) $sesion = 0;
             } else {
                 $newsesion = $sesion + 1;
                 $linea = 1;
@@ -226,7 +228,7 @@ class Sesiones extends Controller {
                 $array_palabras = $_POST["check-word"];
                 
                 $sql1 = "INSERT INTO historial (usuario_id, palabra_id, aprendida) VALUES (?, ?, ?)";
-                $sql2 = "UPDATE sesion SET sesion = ?, linea = ?, letra = ?, asignado = 0, parte = 1, control_diario = ?, sesion_termino = ? WHERE id = ?";
+                $sql2 = "UPDATE sesion SET sesion = ?, linea = ?, letra = 1, asignado = 0, parte = 1, control_diario = ?, sesion_termino = ? WHERE id = ?";
                 $sql3 = "DELETE FROM temporal WHERE sesion_id = ?";
                 
                 try {
@@ -243,7 +245,7 @@ class Sesiones extends Controller {
                     if (!$sql2 = $this->db->conn->prepare($sql2)) {
                         throw new Exception('Error al registrar segundo step.');
                     }
-                    $sql2->bind_param("iiibii", $newsesion, $linea, $letra, $control_diario, $sesion, $id);
+                    $sql2->bind_param("iiiii", $newsesion, $linea, $control_diario, $sesion, $id);
                     $sql2->execute();
                     if (!$sql3 = $this->db->conn->prepare($sql3)) {
                         throw new Exception('Error al registrar segundo step.');

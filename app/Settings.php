@@ -1,6 +1,6 @@
 <?php
 /* NO OLVIDAR CAMBIAR LA RUTA EN EL .HTACCESS.*/
-define('TIPO_DESARROLLO', 'SERVIDOR'); /* LOCAL O SERVIDOR*/
+define('TIPO_DESARROLLO', 'LOCAL'); /* LOCAL O SERVIDOR*/
 define('APP_NAME', 'PROGRAMA DE LECTURA');
 if (TIPO_DESARROLLO == "LOCAL") {
     /**************** VARIABLES EN LOCAL ****************/
