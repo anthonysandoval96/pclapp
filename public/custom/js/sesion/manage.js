@@ -44,10 +44,10 @@ $(document).ready(function() {
         var checkbox_length = $(this).find("input[type=checkbox]").length;
         var checkbox_selected_length = $(this).find("input[type=checkbox]:checked").length;
 
+        var dataString = $(this).serialize();
+
         if (checkbox_selected_length > 0) {
     
-            var dataString = $(this).serialize();
-
             // console.log(atob($("#sesion-data").val()));
             
             if (atob($("#sesion-data").val()).split(",")[4] == "0") {
@@ -76,7 +76,6 @@ $(document).ready(function() {
                         method: 'POST',
                         data: dataString,
                         success: function (data) {
-                            console.log('Actualizar actualizarSesionAll '+data);
                             cargarRegistros();
                         }
                     });
@@ -86,7 +85,6 @@ $(document).ready(function() {
                         method: 'POST',
                         data: dataString,
                         success: function (data) {
-                            console.log('Actualizar seleccionarPalabrasConocidas '+data);
                             cargarRegistros();
                         }
                     });
@@ -105,7 +103,16 @@ $(document).ready(function() {
             /* Cambiar la letra y generar nuevas palabras 
                cuando no seleccionas ninguna palabra */
             if (checkbox_length > 0) {
-                cambiarLetraYpalabras();
+                console.log("<jaja");
+                $.ajax({
+                    url: PROJECT_NAME + "/sesion/seleccionarPalabrasConocidas",
+                    method: 'POST',
+                    data: dataString,
+                    success: function (data) {
+                        cargarRegistros();
+                    }
+                });
+                // cambiarLetraYpalabras();
             } else {
                 var html = generate_html_instruccion(4);
                 alerts("alert-warning", html, "Información importante");
@@ -120,7 +127,6 @@ function cargarRegistros() {
         method: 'POST',
         data: '',
         success: function (data) {
-            console.log(data);
             var json = JSON.parse(data);
             cargarPalabras(json);
         }
@@ -255,8 +261,8 @@ function htmlTablaPalabras(data, sesion) {
 
 function mostrarSignificadoDePalabra(idword) {
 
-    var numero_veces = $("#num_de_veces").text();
-    var texto_veces = $("#texto_veces").text();
+    var numero_veces = $("#num_de_veces").val();
+    var texto_veces = $("#texto_veces").val();
 
     $.ajax({
         url: PROJECT_NAME + "/sesion/cargarSignificadoDePalabra/"+idword,

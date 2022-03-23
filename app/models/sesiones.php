@@ -73,6 +73,20 @@ class Sesiones extends Controller {
                     $this->db->conn->rollback();
                     return $ex->getMessage();
                 } 
+            } else {
+                $sql2 = "UPDATE sesion SET parte = ? WHERE id = ?";
+                try {
+                    $this->db->conn->autocommit(false);
+                    if (!$sql2 = $this->db->conn->prepare($sql2)) {
+                        throw new Exception('Error al registrar segundo step.');
+                    }
+                    $sql2->bind_param("ii", $post_parte, $post_sesion);
+                    $sql2->execute();
+                    return $this->db->conn->commit();
+                } catch (Exception $ex) {
+                    $this->db->conn->rollback();
+                    return $ex->getMessage();
+                } 
             }
         }
     }

@@ -9,11 +9,17 @@
         $sesion_diaria = [];
     }
 
+    $numero_de_veces = numerodeveces($userlogued["fecha_nacimiento"]);
+    $texto_veces = "veces";
+    if ($numero_de_veces == "01") $texto_veces = "vez";
+
 ?>
 
 <?php $__env->startSection('content'); ?>
 <!-- Main content -->
 <div class="content px-2">
+    <input id='num_de_veces' type="hidden" value="<?php echo e($numero_de_veces); ?>">
+    <input id='texto_veces' type="hidden" value="<?php echo e($texto_veces); ?>">
     <div id="body-palabras" class="container">
         <div class="row">
             <form class="col-md-7 m-auto" id="form-sesiones" name="form-sesiones">
