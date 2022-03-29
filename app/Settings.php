@@ -30,6 +30,7 @@ define('CACHE_VERSION', rand());
 define('PUBLIC_ROUTE', BASE_URL . 'public/');
 define('PLUGINS_ROUTE', PUBLIC_ROUTE . 'plugins/');
 define('CUSTOM_ROUTE', PUBLIC_ROUTE . 'custom/');
+define('FILES_ROUTE', $_SERVER["DOCUMENT_ROOT"] . PROJECT_NAME .'/public/custom/files/');
 define('IMG_ROUTE', CUSTOM_ROUTE . 'img/');
 define('CHARSET', 'utf8mb4');
 /**************** VARIABLES GLOBALES ****************/

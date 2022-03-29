@@ -145,8 +145,7 @@ class Palabra extends Controller {
                 ];
                 $this->view('home', $data);
             } else {
-                $archivo = RUTA_ARCHIVE."files/PCL_Plantilla_Palabras.xlsx";
-                // echo $archivo;
+                $archivo = FILES_ROUTE."PCL_Plantilla_Palabras.xlsx";
                 // Nos aseguramos que el archivo exista
                 if (!file_exists($archivo)) {
                     echo "El fichero $archivo no existe";
