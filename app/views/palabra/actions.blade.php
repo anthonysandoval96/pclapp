@@ -49,6 +49,9 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
+                        <div class="col-12 text-center mb-3">
+                            <a href="{{BASE_URL}}{{$controller}}/descargarPlantilla" class="btn btn-success"><i class="fas fa-file-excel mr-2"></i>Descargar plantilla aquí</a>
+                        </div>
                         <div class="col-12 text-center">
                             <div class="position-relative">
                                 <label for="file-upload" class="btn btn-info">

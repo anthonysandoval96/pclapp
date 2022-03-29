@@ -74,6 +74,7 @@ class Sesiones extends Controller {
                     return $ex->getMessage();
                 } 
             } else {
+                $post_parte = 2;
                 $sql2 = "UPDATE sesion SET parte = ? WHERE id = ?";
                 try {
                     $this->db->conn->autocommit(false);
